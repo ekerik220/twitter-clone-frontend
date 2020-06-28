@@ -48,11 +48,17 @@ const Wrapper = styled.div`
 
 const TwitterBirdSVG = styled(TwitterBird)`
   color: ${({ theme }) => theme.colors.blueMain};
-  height: 160vh;
   max-width: none;
   position: absolute;
-  right: -50vh;
-  top: -30vh;
+  height: 60vh;
+  top: -10vh;
+  right: -10vh;
+
+  @media only screen and (min-width: 800px) {
+    height: 160vh;
+    right: -50vh;
+    top: -30vh;
+  }
 `;
 
 const TextArea = styled.div`
