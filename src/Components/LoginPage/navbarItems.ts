@@ -4,6 +4,7 @@ type NavbarItem = {
 };
 
 // TODO: Change https://twitter.com/* addresses to local routes once those routes are made
+// TODO: Remove actual links to twitter? Replace with a route that explains this is just a clone?
 
 export const navbarItems: NavbarItem[] = [
   {

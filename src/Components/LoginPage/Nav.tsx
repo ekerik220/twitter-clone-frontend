@@ -14,9 +14,6 @@ export function Nav() {
           <span>{navbarItem.text}</span>
         </NavLink>
       ))}
-      <Copyright>
-        <span>© 2020 Twitter, Inc.</span>
-      </Copyright>
     </Wrapper>
   );
 }
@@ -38,12 +35,4 @@ const NavLink = styled.a`
   &:hover {
     text-decoration-line: underline;
   }
-`;
-
-const Copyright = styled.div`
-  color: ${({ theme }) => theme.colors.greyText};
-  font-size: 13px;
-  margin: 5px 0;
-  padding-right: 15px;
-  text-decoration: none;
 `;

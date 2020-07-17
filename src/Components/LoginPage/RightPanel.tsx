@@ -13,7 +13,7 @@ export function RightPanel() {
       <CenterBox>
         <TwitterBirdSVG />
         <Heading>See what's happening in the world right now</Heading>
-        <JoinTwitterText>Join Twitter today.</JoinTwitterText>
+        <JoinTwatterText>Join Twatter today.</JoinTwatterText>
         <StyledButton>Sign up</StyledButton>
         <StyledButton variation="outline">Log in</StyledButton>
       </CenterBox>
@@ -64,7 +64,7 @@ const Heading = styled.span`
   line-height: 1.3125;
 `;
 
-const JoinTwitterText = styled.span`
+const JoinTwatterText = styled.span`
   font-size: 15px;
   font-weight: bold;
   margin-top: 59px;
