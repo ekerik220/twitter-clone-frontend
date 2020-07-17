@@ -26,7 +26,7 @@ const Wrapper = styled.a.attrs({ role: "button" })<WrapperProps>`
   font-size: 15px;
   font-weight: bold;
   justify-content: center;
-  min-height: 39px;
+  height: 39px;
   transition: background-color 0.2s;
   user-select: none;
 
