@@ -1,21 +1,16 @@
 import React from "react";
 import styled from "styled-components";
 import { Button } from "Components";
+import { InputBox } from "Components/InputBox/InputBox";
 
 export function LoginForm() {
   return (
     <Wrapper>
       <div style={{ minWidth: 0 }}>
-        <InputBox>
-          <span>Phone, email, or username</span>
-          <input name="username" id="" />
-        </InputBox>
+        <StyledInputBox title="Phone, email, or username" value="" />
       </div>
       <div style={{ minWidth: 0, position: "relative" }}>
-        <InputBox style={{ position: "relative" }}>
-          <span>Password</span>
-          <input />
-        </InputBox>
+        <StyledInputBox title="Password" value="" />
         <ForgotPasswordLink>Forgot password?</ForgotPasswordLink>
       </div>
       <LoginButtonBox>
@@ -32,42 +27,9 @@ const Wrapper = styled.form`
   height: 60px;
 `;
 
-const InputBox = styled.label`
-  display: flex;
-  flex-direction: column;
-  background-color: ${({ theme }) => theme.colors.greyBackground};
-  padding: 5px 10px 0;
+const StyledInputBox = styled(InputBox)`
   border-bottom: 1.5px solid black;
-  max-width: 210px;
-  min-width: 0;
-  font-size: 15px;
   margin-right: 15px;
-
-  span {
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    color: ${({ theme }) => theme.colors.greyText};
-  }
-
-  input {
-    border: none;
-    outline-style: none;
-    background-color: ${({ theme }) => theme.colors.greyBackground};
-    padding-top: 2px;
-    padding-bottom: 5px;
-    font-size: 19px;
-    font-family: ${({ theme }) => theme.inputFont};
-    line-height: 1.3;
-  }
-
-  &:focus-within {
-    border-color: ${({ theme }) => theme.colors.blueMain};
-
-    span {
-      color: ${({ theme }) => theme.colors.blueMain};
-    }
-  }
 `;
 
 const ForgotPasswordLink = styled.a`
