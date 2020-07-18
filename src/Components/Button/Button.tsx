@@ -4,19 +4,26 @@ import styled, { css } from "styled-components";
 type PropTypes = {
   variation?: "primary" | "outline";
   children?: React.ReactNode;
+  disabled?: boolean;
   className?: string;
 };
 
-export function Button(props: PropTypes) {
+export function Button({
+  variation,
+  children,
+  disabled = false,
+  className,
+}: PropTypes) {
   return (
-    <Wrapper variation={props.variation} className={props.className}>
-      {props.children}
+    <Wrapper variation={variation} className={className} disabled={disabled}>
+      {children}
     </Wrapper>
   );
 }
 
 type WrapperProps = {
   variation?: string;
+  disabled: boolean;
 };
 const Wrapper = styled.a.attrs({ role: "button" })<WrapperProps>`
   align-items: center;
@@ -29,9 +36,11 @@ const Wrapper = styled.a.attrs({ role: "button" })<WrapperProps>`
   height: 39px;
   transition: background-color 0.2s;
   user-select: none;
+  opacity: ${({ disabled }) => (disabled ? "0.5" : "1")};
+  pointer-events: ${({ disabled }) => (disabled ? "none" : "auto")};
 
   ${({ variation }) =>
-    variation === "outline" ? outlineStyles : primaryStyles}
+    variation === "outline" ? outlineStyles : primaryStyles};
 `;
 
 const primaryStyles = css`
