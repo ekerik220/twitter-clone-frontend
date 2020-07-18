@@ -9,5 +9,7 @@ export const theme = {
     blueSecondary: "rgb(113, 201, 248)",
     primaryButtonHover: "rgb(26, 145, 218)",
     outlineButtonHover: "rgba(29,161,242,0.1)",
+    modalBackground: "rgba(0, 0, 0, 0.4)",
+    errorRed: "rgb(224, 36, 94)",
   },
 };
