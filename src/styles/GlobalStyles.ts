@@ -14,4 +14,13 @@ html, body, #root {
 body {
     font-family: ${({ theme }) => theme.fontFamily}
 }
+
+a {
+    text-decoration: none;
+    color: rgb(27, 149, 224);
+}
+
+a:hover {
+    text-decoration: underline;
+}
 `;
