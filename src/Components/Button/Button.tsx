@@ -5,6 +5,7 @@ type PropTypes = {
   variation?: "primary" | "outline";
   children?: React.ReactNode;
   disabled?: boolean;
+  onClick?: (event: React.MouseEvent<HTMLAnchorElement>) => void;
   className?: string;
 };
 
@@ -12,10 +13,16 @@ export function Button({
   variation,
   children,
   disabled = false,
+  onClick,
   className,
 }: PropTypes) {
   return (
-    <Wrapper variation={variation} className={className} disabled={disabled}>
+    <Wrapper
+      onClick={onClick}
+      variation={variation}
+      className={className}
+      disabled={disabled}
+    >
       {children}
     </Wrapper>
   );
