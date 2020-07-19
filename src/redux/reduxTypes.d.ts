@@ -8,6 +8,8 @@ interface RootState {
       year: string;
       trackBrowsing: boolean;
     };
+    currentPage: 1 | 2 | 3 | 4 | 5;
     currentPageValidated: boolean;
+    focusedField: string;
   };
 }
