@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from "react";
+import React, { useState, useCallback, useEffect, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useLazyQuery, gql } from "@apollo/client";
 import styled from "styled-components";
@@ -62,6 +62,23 @@ export function PageOne() {
   const { name, email, day, month, year } = useSelector(
     (state: RootState) => state.signup.userInfo
   );
+  const focusedField = useSelector(
+    (state: RootState) => state.signup.focusedField
+  );
+
+  // * Refs for name, email, and month field so we can automatically
+  // * focus them.
+  const nameField = useRef<HTMLInputElement>(null);
+  const emailField = useRef<HTMLInputElement>(null);
+  const monthField = useRef<HTMLSelectElement>(null);
+
+  // * If a focusedField is specified, automatically focus
+  // * that field, and tell redux.
+  useEffect(() => {
+    if (focusedField === "name") nameField.current?.focus();
+    if (focusedField === "email") emailField.current?.focus();
+    if (focusedField === "month") monthField.current?.focus();
+  }, [focusedField]);
 
   // * Update redux state as the name input field changes + error checking.
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -136,6 +153,7 @@ export function PageOne() {
         onChange={handleNameChange}
         maxLength={50}
         error={nameError}
+        ref={nameField}
       />
       <Details>
         {nameError && <ErrorText>What's your name?</ErrorText>}
@@ -147,6 +165,7 @@ export function PageOne() {
         onChange={handleEmailChange}
         maxLength={80}
         error={emailError || emailTakenError}
+        ref={emailField}
       />
       <Details>
         {emailError && <ErrorText>Please enter a valid email.</ErrorText>}
@@ -165,6 +184,7 @@ export function PageOne() {
           options={months}
           value={month}
           onChange={(e) => dispatch(monthChanged(e.target.value))}
+          ref={monthField}
         />
         <DaySelect
           title="Day"
