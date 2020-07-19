@@ -2,16 +2,20 @@ import React from "react";
 import styled from "styled-components";
 
 type PropTypes = {
+  type?: string;
   title?: string;
   value?: string;
+  maxLength?: number;
   onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
   error?: boolean;
   className?: string;
 };
 
 export function InputBox({
+  type,
   title,
   value,
+  maxLength,
   onChange,
   error = false,
   className,
@@ -20,7 +24,13 @@ export function InputBox({
     <Wrapper className={className} error={error}>
       <label>
         <Title error={error}>{title}</Title>
-        <Input error={error} value={value} onChange={onChange} />
+        <Input
+          error={error}
+          value={value}
+          onChange={onChange}
+          maxLength={maxLength}
+          type={type}
+        />
       </label>
     </Wrapper>
   );
