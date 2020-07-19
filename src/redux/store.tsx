@@ -1,9 +1,8 @@
 import { configureStore, combineReducers } from "@reduxjs/toolkit";
-
-// TODO: Import reducers
+import signup from "./slices/signupSlice";
 
 const reducer = combineReducers({
-  // Add reducers here
+  signup,
 });
 
 export const store = configureStore({
