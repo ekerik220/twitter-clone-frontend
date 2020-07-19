@@ -46,6 +46,10 @@ const Wrapper = styled.a.attrs({ role: "button" })<WrapperProps>`
   opacity: ${({ disabled }) => (disabled ? "0.5" : "1")};
   pointer-events: ${({ disabled }) => (disabled ? "none" : "auto")};
 
+  &:hover {
+    text-decoration: none;
+  }
+
   ${({ variation }) =>
     variation === "outline" ? outlineStyles : primaryStyles};
 `;
