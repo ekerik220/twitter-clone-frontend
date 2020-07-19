@@ -24,6 +24,7 @@ export const InputBox = React.forwardRef<HTMLInputElement, PropTypes>(
             maxLength={props.maxLength}
             type={props.type}
             ref={ref}
+            spellCheck="false"
           />
         </label>
       </Wrapper>
