@@ -10,6 +10,7 @@ export function Nav() {
           href={navbarItem.href}
           target="_blank"
           rel=" noopener noreferrer"
+          key={navbarItem.text}
         >
           <span>{navbarItem.text}</span>
         </NavLink>
