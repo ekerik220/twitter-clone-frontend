@@ -10,25 +10,27 @@ type PropTypes = {
   className?: string;
 };
 
-export function SelectBox(props: PropTypes) {
-  return (
-    <Wrapper className={props.className}>
-      <label>
-        <Title>{props.title}</Title>
-        <Select value={props.value} onChange={props.onChange}>
-          <option selected disabled></option>
-          {props.options &&
-            props.options.map((item, index) => (
-              <option value={item} key={index}>
-                {item}
-              </option>
-            ))}
-        </Select>
-        <DownArrowSVG />
-      </label>
-    </Wrapper>
-  );
-}
+export const SelectBox = React.forwardRef<HTMLSelectElement, PropTypes>(
+  (props, ref) => {
+    return (
+      <Wrapper className={props.className}>
+        <label>
+          <Title>{props.title}</Title>
+          <Select value={props.value} onChange={props.onChange} ref={ref}>
+            <option selected disabled></option>
+            {props.options &&
+              props.options.map((item, index) => (
+                <option value={item} key={index}>
+                  {item}
+                </option>
+              ))}
+          </Select>
+          <DownArrowSVG />
+        </label>
+      </Wrapper>
+    );
+  }
+);
 
 const Title = styled.span`
   color: ${({ theme }) => theme.colors.greyText};

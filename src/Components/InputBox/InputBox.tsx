@@ -11,30 +11,25 @@ type PropTypes = {
   className?: string;
 };
 
-export function InputBox({
-  type,
-  title,
-  value,
-  maxLength,
-  onChange,
-  error = false,
-  className,
-}: PropTypes) {
-  return (
-    <Wrapper className={className} error={error}>
-      <label>
-        <Title error={error}>{title}</Title>
-        <Input
-          error={error}
-          value={value}
-          onChange={onChange}
-          maxLength={maxLength}
-          type={type}
-        />
-      </label>
-    </Wrapper>
-  );
-}
+export const InputBox = React.forwardRef<HTMLInputElement, PropTypes>(
+  ({ error = false, ...props }, ref) => {
+    return (
+      <Wrapper className={props.className} error={error}>
+        <label>
+          <Title error={error}>{props.title}</Title>
+          <Input
+            error={error}
+            value={props.value}
+            onChange={props.onChange}
+            maxLength={props.maxLength}
+            type={props.type}
+            ref={ref}
+          />
+        </label>
+      </Wrapper>
+    );
+  }
+);
 
 type TitleProps = { error: boolean };
 const Title = styled.span<TitleProps>`
