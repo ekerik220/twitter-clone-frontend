@@ -11,5 +11,8 @@ export const theme = {
     outlineButtonHover: "rgba(29,161,242,0.1)",
     modalBackground: "rgba(0, 0, 0, 0.4)",
     errorRed: "rgb(224, 36, 94)",
+    greyBorder: "rgb(101, 119, 134)",
+    blueHover: "rgba(29, 161, 242, 0.1)",
+    greyHover: "rgba(101, 119, 134, 0.1)",
   },
 };
