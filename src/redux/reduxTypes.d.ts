@@ -6,6 +6,7 @@ interface RootState {
       month: string;
       day: string;
       year: string;
+      trackBrowsing: boolean;
     };
     currentPageValidated: boolean;
   };

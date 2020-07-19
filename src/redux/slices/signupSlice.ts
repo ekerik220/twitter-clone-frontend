@@ -9,6 +9,7 @@ const slice = createSlice({
       month: "",
       day: "",
       year: "",
+      trackBrowsing: true,
     },
     currentPageValidated: false,
   },
@@ -34,6 +35,9 @@ const slice = createSlice({
     currentPageIsInvalid: (state) => {
       state.currentPageValidated = false;
     },
+    trackBrowsingWasChanged: (state, action: PayloadAction<boolean>) => {
+      state.userInfo.trackBrowsing = action.payload;
+    },
   },
 });
 
@@ -45,6 +49,7 @@ export const {
   yearChanged,
   currentPageIsInvalid,
   currentPageIsValid,
+  trackBrowsingWasChanged,
 } = slice.actions;
 
 export default slice.reducer;
