@@ -40,6 +40,12 @@ const years = Array.from(Array(101), (_, i) =>
   (i + currYear - 100).toString()
 ).reverse();
 
+const USERNAME_TAKEN = gql`
+  query UsernameTaken($username: String!) {
+    usernameTaken(username: $username)
+  }
+`;
+
 const EMAIL_TAKEN = gql`
   query EmailTaken($email: String!) {
     emailTaken(email: $email)
@@ -51,10 +57,18 @@ const EMAIL_TAKEN = gql`
  *********************************/
 export function PageOne() {
   const dispatch = useDispatch();
-  const [emailTaken, { data, variables }] = useLazyQuery(EMAIL_TAKEN);
+  const [
+    emailTaken,
+    { data: email_data, variables: email_variables },
+  ] = useLazyQuery(EMAIL_TAKEN);
+  const [
+    usernameTaken,
+    { data: username_data, variables: username_variables },
+  ] = useLazyQuery(USERNAME_TAKEN);
 
   // * Local state
   const [nameError, setNameError] = useState(false);
+  const [nameTakenError, setNameTakenError] = useState(false);
   const [emailError, setEmailError] = useState(false);
   const [emailTakenError, setEmailTakenError] = useState(false);
 
@@ -80,10 +94,34 @@ export function PageOne() {
     if (focusedField === "month") monthField.current?.focus();
   }, [focusedField]);
 
+  // * Debounced error checking on the username field to be used with handleNameChange
+  const debouncedUsernameTakenCheck = useCallback(
+    _.debounce((username: string) => {
+      // Query server to see if it's taken...
+      // The actual error checking will be handled by a useEffect
+      usernameTaken({ variables: { username } });
+    }, 500),
+    []
+  );
+
+  // * Watch the results of usernameTaken query and update the error state
+  useEffect(() => {
+    // Since there's a lag between requesting the check and getting
+    // the results we have to also check if the username we requested
+    // a check for is still the username that is currently inputted
+    if (
+      username_data?.usernameTaken === true &&
+      username_variables?.username === name
+    )
+      setNameTakenError(true);
+  }, [username_data, username_variables, name]);
+
   // * Update redux state as the name input field changes + error checking.
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
+    setNameTakenError(false);
     value.length === 0 ? setNameError(true) : setNameError(false);
+    debouncedUsernameTakenCheck(value);
     dispatch(nameChanged(value));
   };
 
@@ -105,9 +143,9 @@ export function PageOne() {
     // Since there's a lag between requesting the check and getting
     // the results we have to also check if the email we requested
     // a check for is still the email that is currently inputted
-    if (data?.emailTaken === true && variables?.email === email)
+    if (email_data?.emailTaken === true && email_variables?.email === email)
       setEmailTakenError(true);
-  }, [data, variables, email]);
+  }, [email_data, email_variables, email]);
 
   // * Update redux state as the email input field changes + error checking (debounced).
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -152,11 +190,12 @@ export function PageOne() {
         value={name}
         onChange={handleNameChange}
         maxLength={50}
-        error={nameError}
+        error={nameError || nameTakenError}
         ref={nameField}
       />
       <Details>
         {nameError && <ErrorText>What's your name?</ErrorText>}
+        {nameTakenError && <ErrorText>Name has already been taken.</ErrorText>}
         <Counter>{`${name.length}/50`}</Counter>
       </Details>
       <InputBox
