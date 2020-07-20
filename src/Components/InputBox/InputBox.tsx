@@ -8,6 +8,7 @@ type PropTypes = {
   maxLength?: number;
   onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
   error?: boolean;
+  autoFocus?: boolean;
   className?: string;
 };
 
@@ -25,6 +26,7 @@ export const InputBox = React.forwardRef<HTMLInputElement, PropTypes>(
             type={props.type}
             ref={ref}
             spellCheck="false"
+            autoFocus={props.autoFocus}
           />
         </label>
       </Wrapper>
