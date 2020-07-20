@@ -10,10 +10,12 @@ const slice = createSlice({
       day: "",
       year: "",
       trackBrowsing: true,
+      id: "",
     },
     currentPage: 1,
     currentPageValidated: false,
     focusedField: "name",
+    shouldTryCode: false,
   },
   reducers: {
     nameChanged: (state, action: PayloadAction<string>) => {
@@ -42,12 +44,15 @@ const slice = createSlice({
     },
     userWantsToChangeName: (state) => {
       state.focusedField = "name";
+      state.currentPage = 1;
     },
     userWantsToChangeEmail: (state) => {
       state.focusedField = "email";
+      state.currentPage = 1;
     },
     userWantsToChangeBirthday: (state) => {
       state.focusedField = "month";
+      state.currentPage = 1;
     },
     wentBackOnePage: (state) => {
       if (state.currentPage > 1) {
@@ -56,7 +61,18 @@ const slice = createSlice({
       }
     },
     wentForwardOnePage: (state) => {
-      if (state.currentPage < 5) state.currentPage += 1;
+      if (state.currentPage === 4) state.shouldTryCode = true;
+      if (state.currentPage < 4) state.currentPage += 1;
+    },
+    submittedUserInformation: (state, action: PayloadAction<string>) => {
+      state.currentPage = 4;
+      state.userInfo.id = action.payload;
+    },
+    triedCode: (state) => {
+      state.shouldTryCode = false;
+    },
+    codeWasValid: (state) => {
+      state.currentPage = 5;
     },
   },
 });
@@ -72,6 +88,12 @@ export const {
   trackBrowsingWasChanged,
   wentBackOnePage,
   wentForwardOnePage,
+  userWantsToChangeBirthday,
+  userWantsToChangeEmail,
+  userWantsToChangeName,
+  submittedUserInformation,
+  triedCode,
+  codeWasValid,
 } = slice.actions;
 
 export default slice.reducer;

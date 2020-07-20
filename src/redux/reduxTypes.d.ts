@@ -7,9 +7,11 @@ interface RootState {
       day: string;
       year: string;
       trackBrowsing: boolean;
+      id: string;
     };
     currentPage: 1 | 2 | 3 | 4 | 5;
     currentPageValidated: boolean;
     focusedField: string;
+    shouldTryCode: boolean;
   };
 }
