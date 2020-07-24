@@ -90,7 +90,6 @@ export function PageFour() {
         onChange={(e) => setCodeInput(e.target.value)}
         autoFocus={true}
       />
-      <NoEmailLink>Didn't receive email?</NoEmailLink>
       {invalidCodeError && (
         <ErrorMessage>
           The code you entered is incorrect. Please try again.
@@ -117,13 +116,6 @@ const Subtext = styled.span`
   font-size: 15px;
   color: ${({ theme }) => theme.colors.greyText};
   margin-bottom: 10px;
-`;
-
-const NoEmailLink = styled.a`
-  margin-top: 5px;
-  margin-left: 10px;
-  font-size: 14px;
-  cursor: pointer;
 `;
 
 const ErrorMessage = styled.div`
