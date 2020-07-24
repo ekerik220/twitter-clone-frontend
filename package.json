@@ -17,6 +17,7 @@
     "@types/react-dom": "^16.9.8",
     "@types/react-redux": "^7.1.9",
     "@types/react-resize-detector": "^4.2.0",
+    "@types/react-router-dom": "^5.1.5",
     "@types/styled-components": "^5.1.0",
     "apollo-upload-client": "^14.1.0",
     "croppie": "^2.6.5",
