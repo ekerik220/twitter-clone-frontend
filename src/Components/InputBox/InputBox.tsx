@@ -9,6 +9,7 @@ type PropTypes = {
   onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
   error?: boolean;
   autoFocus?: boolean;
+  autoComplete?: string;
   className?: string;
 };
 
@@ -27,6 +28,7 @@ export const InputBox = React.forwardRef<HTMLInputElement, PropTypes>(
             ref={ref}
             spellCheck="false"
             autoFocus={props.autoFocus}
+            autoComplete={props.autoComplete}
           />
         </label>
       </Wrapper>
