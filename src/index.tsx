@@ -7,9 +7,26 @@ import { GlobalStyles, theme } from "styles";
 import { Provider } from "react-redux";
 import { store } from "./redux/store";
 import { ApolloClient, InMemoryCache, ApolloProvider } from "@apollo/client";
+import { createUploadLink } from "apollo-upload-client";
+import { setContext } from "@apollo/client/link/context";
+
+const authLink = setContext((_, { headers }) => {
+  const state = store.getState();
+  const token = state.user.token;
+
+  return {
+    headers: {
+      ...headers,
+      authorization: token ? token : "",
+    },
+  };
+});
+
+const uploadLink = createUploadLink({ uri: "http://localhost:4000/" });
 
 const client = new ApolloClient({
-  uri: "http://localhost:4000/",
+  //@ts-ignore
+  link: authLink.concat(uploadLink),
   cache: new InMemoryCache(),
 });
 
