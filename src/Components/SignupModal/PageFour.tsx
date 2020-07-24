@@ -22,9 +22,6 @@ const CONFIRM_USER = gql`
  **********************************/
 export function PageFour() {
   const dispatch = useDispatch();
-  const [confirmUser, { data, loading, error }] = useMutation(CONFIRM_USER, {
-    errorPolicy: "all",
-  });
 
   // Local state
   const [codeInput, setCodeInput] = useState("");
@@ -36,6 +33,22 @@ export function PageFour() {
     (state: RootState) => state.signup.shouldTryCode
   );
   const userID = useSelector((state: RootState) => state.signup.userInfo.id);
+
+  // * GQL Mutation
+  const [confirmUser, { loading }] = useMutation(CONFIRM_USER, {
+    errorPolicy: "all",
+    onCompleted: (data) => {
+      // tell redux about the success
+      if (data.confirmUser) dispatch(codeWasValid());
+    },
+    onError: () => {
+      // set the invalidCodeError state to true for 4 seconds
+      setInvalidCodeError(true);
+      window.setTimeout(() => {
+        setInvalidCodeError(false);
+      }, 4000);
+    },
+  });
 
   // * Watch the codeInput field and let redux know when it has at least
   // * 1 character (this page is valid in that case).
@@ -53,22 +66,6 @@ export function PageFour() {
       dispatch(triedCode());
     }
   }, [shouldTryCode, userID, confirmUser, codeInput, dispatch]);
-
-  // * Watch the status of the confirm user mutation
-  // * If it was successful, tell redux. If not, tell the user about the error here.
-  useEffect(() => {
-    if (error) {
-      // set the invalidCodeError state to true for 4 seconds
-      setInvalidCodeError(true);
-      window.setTimeout(() => {
-        setInvalidCodeError(false);
-      }, 4000);
-    }
-    if (!error && !loading && data) {
-      // tell redux about the success
-      dispatch(codeWasValid());
-    }
-  }, [data, error, loading, dispatch]);
 
   // If we're waiting on server to check our validation code, just show a
   // centered loading icon.

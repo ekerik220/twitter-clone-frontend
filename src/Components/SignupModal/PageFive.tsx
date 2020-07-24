@@ -12,15 +12,19 @@ import {
 } from "redux/slices/signupSlice";
 import { userLoggedIn } from "redux/slices/userSlice";
 
+// Mutation to add a confirmed user to DB
 const ADD_USER = gql`
-  mutation AddUser($id: ID!, $password: String!) {
+  mutation AddUser($id: ID!, $password: String!, $loginName: String!) {
     addUser(id: $id, password: $password)
+    login(loginName: $loginName, password: $password)
   }
 `;
 
+/**********************************
+ * Page five of the sign up modal
+ **********************************/
 export function PageFive() {
   const dispatch = useDispatch();
-  const [addUser, { data, loading }] = useMutation(ADD_USER);
 
   // Local state
   const [passwordHidden, setPasswordHidden] = useState(true);
@@ -29,9 +33,20 @@ export function PageFive() {
 
   // Redux state
   const userID = useSelector((state: RootState) => state.signup.userInfo.id);
+  const email = useSelector((state: RootState) => state.signup.userInfo.email);
   const shouldTryPassword = useSelector(
     (state: RootState) => state.signup.shouldTryPassword
   );
+
+  // * GQL Mutation
+  const [addUser, { loading }] = useMutation(ADD_USER, {
+    onCompleted: (data) => {
+      const token = data.login;
+      dispatch(createdAccount());
+      dispatch(userLoggedIn(token));
+      // TODO route to the home page
+    },
+  });
 
   // * Debounced password length error checking. Debounce it so it doesn't
   // * immediately give them an error as they're typing, just if they stop
@@ -60,18 +75,9 @@ export function PageFive() {
   // * Watch for redux to tell us to send off the password
   useEffect(() => {
     if (shouldTryPassword) {
-      addUser({ variables: { id: userID, password } });
+      addUser({ variables: { id: userID, password, loginName: email } });
     }
-  }, [shouldTryPassword, dispatch, password, userID, addUser]);
-
-  // * Wait for data to come back from the server (login code)
-  useEffect(() => {
-    if (data) {
-      const token = data.addUser;
-      dispatch(createdAccount());
-      dispatch(userLoggedIn(token));
-    }
-  }, [data, dispatch]);
+  }, [shouldTryPassword, dispatch, password, userID, addUser, email]);
 
   // If we're waiting on server, just show a centered loading icon
   if (loading)

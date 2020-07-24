@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { gql, useMutation } from "@apollo/client";
 import styled from "styled-components";
@@ -11,6 +11,7 @@ import {
 import { Button } from "Components/Button/Button";
 import moment from "moment";
 
+// Mutation to add an unconfirmed user to DB
 const ADD_UNCONFIRMED_USER = gql`
   mutation AddUnconfirmedUser(
     $email: EmailAddress!
@@ -28,28 +29,24 @@ const ADD_UNCONFIRMED_USER = gql`
 export function PageThree() {
   const dispatch = useDispatch();
 
-  // * GraphQL
-  const [addUnconfirmedUser, { data, loading, error }] = useMutation(
-    ADD_UNCONFIRMED_USER
-  );
-
   // * Pull data from redux
   const { name, email, day, month, year } = useSelector(
     (state: RootState) => state.signup.userInfo
   );
+
+  // * GraphQL
+  const [addUnconfirmedUser] = useMutation(ADD_UNCONFIRMED_USER, {
+    onCompleted: (data) => {
+      // let redux know we submitted user information
+      dispatch(submittedUserInformation(data.addUnconfirmedUser));
+    },
+  });
 
   // * Send mutation to server to add an unconfirmed user
   const handleSignupClick = () => {
     const birthdate = moment(`${day} ${month} ${year}`).format("YYYY-MM-DD");
     addUnconfirmedUser({ variables: { email, username: name, birthdate } });
   };
-
-  // * Let redux know we submitted user information (it also wants to know
-  // * the id of the user we submitted).
-  useEffect(() => {
-    if (!loading && !error && data)
-      dispatch(submittedUserInformation(data.addUnconfirmedUser));
-  }, [error, loading, data, dispatch]);
 
   return (
     <Container>

@@ -12,12 +12,14 @@ import {
  ********************************/
 export function PageTwo() {
   const dispatch = useDispatch();
+
+  // Redux state
   const checked = useSelector(
     (state: RootState) => state.signup.userInfo.trackBrowsing
   );
 
   // This page has no validation needs, so make sure
-  // redux knows it's valid.
+  // redux knows it's valid right away.
   useEffect(() => {
     dispatch(currentPageIsValid());
   });
