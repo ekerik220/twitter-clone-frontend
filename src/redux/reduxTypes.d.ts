@@ -13,5 +13,8 @@ interface RootState {
     currentPageValidated: boolean;
     focusedField: string;
     shouldTryCode: boolean;
+  imageEditor: {
+    open: boolean;
+    file: string;
   };
 }
