@@ -14,5 +14,6 @@ export const theme = {
     greyBorder: "rgb(101, 119, 134)",
     blueHover: "rgba(29, 161, 242, 0.1)",
     greyHover: "rgba(101, 119, 134, 0.1)",
+    whiteHover: "rgba(255, 255, 255, 0.1)",
   },
 };
