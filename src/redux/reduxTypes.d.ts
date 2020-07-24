@@ -13,6 +13,10 @@ interface RootState {
     currentPageValidated: boolean;
     focusedField: string;
     shouldTryCode: boolean;
+  user: {
+    token: string | null;
+    avatar: string;
+  };
   imageEditor: {
     open: boolean;
     file: string;
