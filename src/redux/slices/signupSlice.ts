@@ -1,23 +1,30 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
+const initialState: RootState["signup"] = {
+  userInfo: {
+    name: "",
+    email: "",
+    month: "",
+    day: "",
+    year: "",
+    trackBrowsing: true,
+    id: "",
+  },
+  currentPage: 1,
+  currentPageValidated: false,
+  focusedField: "name",
+  shouldTryCode: false,
+  shouldTryPassword: false,
+  modalOpen: false,
+};
+
 const slice = createSlice({
   name: "signup",
-  initialState: {
-    userInfo: {
-      name: "",
-      email: "",
-      month: "",
-      day: "",
-      year: "",
-      trackBrowsing: true,
-      id: "",
-    },
-    currentPage: 1,
-    currentPageValidated: false,
-    focusedField: "name",
-    shouldTryCode: false,
-  },
+  initialState,
   reducers: {
+    signupStarted: (state) => {
+      state.modalOpen = true;
+    },
     nameChanged: (state, action: PayloadAction<string>) => {
       state.userInfo.name = action.payload;
     },
@@ -62,6 +69,7 @@ const slice = createSlice({
     },
     wentForwardOnePage: (state) => {
       if (state.currentPage === 4) state.shouldTryCode = true;
+      if (state.currentPage === 5) state.shouldTryPassword = true;
       if (state.currentPage < 4) state.currentPage += 1;
     },
     submittedUserInformation: (state, action: PayloadAction<string>) => {
@@ -74,10 +82,12 @@ const slice = createSlice({
     codeWasValid: (state) => {
       state.currentPage = 5;
     },
+    createdAccount: () => initialState,
   },
 });
 
 export const {
+  signupStarted,
   nameChanged,
   emailChanged,
   monthChanged,
@@ -94,6 +104,7 @@ export const {
   submittedUserInformation,
   triedCode,
   codeWasValid,
+  createdAccount,
 } = slice.actions;
 
 export default slice.reducer;

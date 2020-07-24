@@ -11,6 +11,7 @@ import {
   createdAccount,
 } from "redux/slices/signupSlice";
 import { userLoggedIn } from "redux/slices/userSlice";
+import { useHistory } from "react-router-dom";
 
 // Mutation to add a confirmed user to DB
 const ADD_USER = gql`
@@ -25,6 +26,7 @@ const ADD_USER = gql`
  **********************************/
 export function PageFive() {
   const dispatch = useDispatch();
+  const history = useHistory();
 
   // Local state
   const [passwordHidden, setPasswordHidden] = useState(true);
@@ -44,7 +46,7 @@ export function PageFive() {
       const token = data.login;
       dispatch(createdAccount());
       dispatch(userLoggedIn(token));
-      // TODO route to the home page
+      history.push("/home");
     },
   });
 

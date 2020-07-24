@@ -13,6 +13,9 @@ interface RootState {
     currentPageValidated: boolean;
     focusedField: string;
     shouldTryCode: boolean;
+    shouldTryPassword: boolean;
+    modalOpen: boolean;
+  };
   user: {
     token: string | null;
     avatar: string;
