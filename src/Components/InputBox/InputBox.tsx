@@ -59,7 +59,7 @@ const Input = styled.input<InputProps>`
   font-size: 19px;
   font-family: ${({ theme }) => theme.inputFont};
   line-height: 1.3;
-  border-bottom: 2px solid;
+  border-bottom: 1px solid;
   border-color: ${({ theme, error }) =>
     error ? theme.colors.errorRed : "black"};
 `;
