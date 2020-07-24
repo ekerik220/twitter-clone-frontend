@@ -1,10 +1,14 @@
 import React from "react";
+import { useDispatch } from "react-redux";
+import { signupStarted } from "redux/slices/signupSlice";
 import styled from "styled-components";
 import { TwitterBird } from "assets/icons";
 import { Button } from "Components/Button/Button";
 import { LoginForm } from "./LoginForm";
 
 export function RightPanel() {
+  const dispatch = useDispatch();
+
   return (
     <Wrapper>
       <TopBox>
@@ -14,7 +18,9 @@ export function RightPanel() {
         <TwitterBirdSVG />
         <Heading>See what's happening in the world right now</Heading>
         <JoinTwatterText>Join Twatter today.</JoinTwatterText>
-        <StyledButton>Sign up</StyledButton>
+        <StyledButton onClick={() => dispatch(signupStarted())}>
+          Sign up
+        </StyledButton>
         <StyledButton variation="outline">Log in</StyledButton>
       </CenterBox>
     </Wrapper>

@@ -1,4 +1,6 @@
 import React from "react";
+import { useDispatch } from "react-redux";
+import { signupStarted } from "redux/slices/signupSlice";
 import styled from "styled-components";
 import { LeftPanel } from "./LeftPanel";
 import { RightPanel } from "./RightPanel";
@@ -7,11 +9,15 @@ import { Button } from "Components/Button/Button";
 
 /** This is the page we see when we're not logged in. */
 export function LoginPage() {
+  const dispatch = useDispatch();
+
   return (
     <Wrapper>
       <ContentArea>
         <ExtraSignUpBox>
-          <StyledButton>Sign up</StyledButton>
+          <StyledButton onClick={() => dispatch(signupStarted())}>
+            Sign up
+          </StyledButton>
           <StyledButton variation="outline">Log in</StyledButton>
         </ExtraSignUpBox>
         <LeftPanel />
