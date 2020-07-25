@@ -5,9 +5,11 @@ import styled from "styled-components";
 import { TwitterBird } from "assets/icons";
 import { Button } from "Components/Button/Button";
 import { LoginForm } from "./LoginForm";
+import { useHistory } from "react-router-dom";
 
 export function RightPanel() {
   const dispatch = useDispatch();
+  const history = useHistory();
 
   return (
     <Wrapper>
@@ -21,7 +23,12 @@ export function RightPanel() {
         <StyledButton onClick={() => dispatch(signupStarted())}>
           Sign up
         </StyledButton>
-        <StyledButton variation="outline">Log in</StyledButton>
+        <StyledButton
+          variation="outline"
+          onClick={() => history.push("/login")}
+        >
+          Log in
+        </StyledButton>
       </CenterBox>
     </Wrapper>
   );
