@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { useDispatch } from "react-redux";
+import React, { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { userLoggedIn } from "redux/slices/userSlice";
 import { gql, useMutation } from "@apollo/client";
 import styled from "styled-components";
@@ -7,6 +7,7 @@ import { TwitterBird, LoadingIcon } from "assets/icons";
 import { InputBox } from "Components/InputBox/InputBox";
 import { Button } from "Components/Button/Button";
 import { signupStarted } from "redux/slices/signupSlice";
+import { useHistory } from "react-router-dom";
 
 const LOGIN = gql`
   mutation Login($loginName: String!, $password: String!) {
@@ -16,10 +17,20 @@ const LOGIN = gql`
 
 export function StandaloneLoginPage() {
   const dispatch = useDispatch();
+  const history = useHistory();
 
   // Local state
   const [loginName, setLoginName] = useState("");
   const [password, setPassword] = useState("");
+
+  // Redux state
+  // if we have a token we're logged in
+  const loggedIn = useSelector((state: RootState) => state.user.token);
+
+  // * redirect to /home if logged in
+  useEffect(() => {
+    if (loggedIn) history.push("/home");
+  }, [history, loggedIn]);
 
   // * GQL mutation
   const [login, { loading, error }] = useMutation(LOGIN, {
