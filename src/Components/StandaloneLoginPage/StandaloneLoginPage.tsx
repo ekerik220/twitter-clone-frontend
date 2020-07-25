@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useLayoutEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { userLoggedIn } from "redux/slices/userSlice";
 import { gql, useMutation } from "@apollo/client";
@@ -28,7 +28,7 @@ export function StandaloneLoginPage() {
   const loggedIn = useSelector((state: RootState) => state.user.token);
 
   // * redirect to /home if logged in
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (loggedIn) history.push("/home");
   }, [history, loggedIn]);
 
