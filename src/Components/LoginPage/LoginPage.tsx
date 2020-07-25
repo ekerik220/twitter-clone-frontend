@@ -1,15 +1,25 @@
-import React from "react";
-import { useDispatch } from "react-redux";
+import React, { useLayoutEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { signupStarted } from "redux/slices/signupSlice";
 import styled from "styled-components";
 import { LeftPanel } from "./LeftPanel";
 import { RightPanel } from "./RightPanel";
 import { Nav } from "./Nav";
 import { Button } from "Components/Button/Button";
+import { useHistory } from "react-router-dom";
 
 /** This is the page we see when we're not logged in. */
 export function LoginPage() {
   const dispatch = useDispatch();
+  const history = useHistory();
+
+  // Redux state
+  const loggedIn = useSelector((state: RootState) => state.user.token);
+
+  // * Redirect to /home if logged in
+  useLayoutEffect(() => {
+    if (loggedIn) history.push("/home");
+  }, [loggedIn, history]);
 
   return (
     <Wrapper>
