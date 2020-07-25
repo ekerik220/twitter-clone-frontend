@@ -4,6 +4,7 @@ import { LoginPage, SignupModal } from "Components";
 import { ImageEditor } from "./ImageEditor/ImageEditor";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { Home } from "./Home/Home";
+import { StandaloneLoginPage } from "./StandaloneLoginPage/StandaloneLoginPage";
 
 function App() {
   // Redux state
@@ -17,8 +18,11 @@ function App() {
   return (
     <Router>
       <Switch>
-        <Route path="/login">
+        <Route exact path="/">
           <LoginPage />
+        </Route>
+        <Route path="/login">
+          <StandaloneLoginPage />
         </Route>
         <Route path="/home">
           <Home />
