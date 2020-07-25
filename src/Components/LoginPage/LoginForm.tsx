@@ -1,26 +1,85 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { Button } from "Components";
 import { InputBox } from "Components/InputBox/InputBox";
+import { useMutation, gql } from "@apollo/client";
+import { useDispatch } from "react-redux";
+import { userLoggedIn } from "redux/slices/userSlice";
+import { LoadingIcon } from "assets/icons";
+
+const LOGIN = gql`
+  mutation Login($loginName: String!, $password: String!) {
+    login(loginName: $loginName, password: $password)
+  }
+`;
 
 export function LoginForm() {
+  const dispatch = useDispatch();
+
+  // Local state
+  const [loginName, setLoginName] = useState("");
+  const [password, setPassword] = useState("");
+
+  // * GQL mutation
+  const [login, { loading, error }] = useMutation(LOGIN, {
+    errorPolicy: "all",
+    onCompleted: (data) => {
+      if (data?.login) {
+        const token = data.login;
+        dispatch(userLoggedIn(token));
+      }
+    },
+  });
+
+  // If we're waiting on server, just show a centered loading icon
+  if (loading)
+    return (
+      <Loading>
+        <LoadingIcon />
+      </Loading>
+    );
+
   return (
     <Wrapper>
-      <div style={{ minWidth: 0 }}>
-        <StyledInputBox title="Phone, email, or username" value="" />
-      </div>
-      <div style={{ minWidth: 0, position: "relative" }}>
-        <StyledInputBox title="Password" value="" />
-        <ForgotPasswordLink>Forgot password?</ForgotPasswordLink>
-      </div>
-      <LoginButtonBox>
-        <Button variation="outline">Log in</Button>
-      </LoginButtonBox>
+      {error && (
+        <ErrorText>
+          The email and password you entered did not match our records. Please
+          double-check and try again.
+        </ErrorText>
+      )}
+      <Form>
+        <StyledInputBox
+          title="Phone, email, or username"
+          value={loginName}
+          onChange={(e) => setLoginName(e.target.value)}
+          type="username"
+        />
+        <StyledInputBox
+          title="Password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          type="password"
+        />
+        <LoginButtonBox>
+          <Button
+            variation="outline"
+            onClick={() => login({ variables: { loginName, password } })}
+            disabled={loginName.length < 1 || password.length < 1}
+          >
+            Log in
+          </Button>
+        </LoginButtonBox>
+      </Form>
     </Wrapper>
   );
 }
 
-const Wrapper = styled.form`
+const Wrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
+const Form = styled.form`
   display: flex;
   min-width: 0;
   top: 15px;
@@ -31,23 +90,24 @@ const StyledInputBox = styled(InputBox)`
   margin-right: 15px;
 `;
 
-const ForgotPasswordLink = styled.a`
-  position: absolute;
-  color: ${({ theme }) => theme.colors.blueMain};
-  bottom: -25px;
-  left: 8px;
-  font-size: 13px;
-  cursor: pointer;
-
-  &:hover {
-    text-decoration: underline;
-  }
-`;
-
 const LoginButtonBox = styled.div`
   width: 78px;
   min-width: 78px;
   display: flex;
   flex-direction: column;
   justify-content: center;
+`;
+
+const Loading = styled.div`
+  display: flex;
+  margin: 0 auto;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+`;
+
+const ErrorText = styled.span`
+  color: ${({ theme }) => theme.colors.errorRed};
+  margin: 10px;
+  font-size: 15px;
 `;
