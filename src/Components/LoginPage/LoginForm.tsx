@@ -6,7 +6,9 @@ import { useMutation, gql } from "@apollo/client";
 import { useDispatch } from "react-redux";
 import { userLoggedIn } from "redux/slices/userSlice";
 import { LoadingIcon } from "assets/icons";
+import { useHistory } from "react-router-dom";
 
+// GQL mutation for user log in
 const LOGIN = gql`
   mutation Login($loginName: String!, $password: String!) {
     login(loginName: $loginName, password: $password)
@@ -15,6 +17,7 @@ const LOGIN = gql`
 
 export function LoginForm() {
   const dispatch = useDispatch();
+  const history = useHistory();
 
   // Local state
   const [loginName, setLoginName] = useState("");
@@ -27,6 +30,7 @@ export function LoginForm() {
       if (data?.login) {
         const token = data.login;
         dispatch(userLoggedIn(token));
+        history.push("/home");
       }
     },
   });
