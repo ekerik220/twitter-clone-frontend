@@ -73,13 +73,7 @@ export function StandaloneLoginPage() {
       >
         Log in
       </StyledButton>
-      <LinkArea>
-        <Link>Forgot password?</Link>
-        <LinkDivider>·</LinkDivider>
-        <Link onClick={() => dispatch(signupStarted())}>
-          Sign up for Twatter
-        </Link>
-      </LinkArea>
+      <Link onClick={() => dispatch(signupStarted())}>Sign up for Twatter</Link>
     </Container>
   );
 }
@@ -120,14 +114,6 @@ const StyledButton = styled(Button)`
   width: 100%;
   height: 47px;
   margin-bottom: 10px;
-`;
-
-const LinkArea = styled.div`
-  display: flex;
-`;
-
-const LinkDivider = styled.span`
-  margin: 0 5px;
 `;
 
 const Link = styled.span`
