@@ -40,13 +40,6 @@ const years = Array.from(Array(101), (_, i) =>
   (i + currYear - 100).toString()
 ).reverse();
 
-// Query to check if a username is taken already
-const USERNAME_TAKEN = gql`
-  query UsernameTaken($username: String!) {
-    usernameTaken(username: $username)
-  }
-`;
-
 // Query to check if an email is taken already
 const EMAIL_TAKEN = gql`
   query EmailTaken($email: String!) {
@@ -73,25 +66,9 @@ export function PageOne() {
       },
     }
   );
-  const [usernameTaken, { variables: username_variables }] = useLazyQuery(
-    USERNAME_TAKEN,
-    {
-      onCompleted: (data) => {
-        // Since there's a lag between requesting the check and getting
-        // the results we have to also check if the username we requested
-        // a check for is still the username that is currently inputted
-        if (
-          data.usernameTaken === true &&
-          username_variables?.username === name
-        )
-          setNameTakenError(true);
-      },
-    }
-  );
 
   // * Local state
   const [nameError, setNameError] = useState(false);
-  const [nameTakenError, setNameTakenError] = useState(false);
   const [emailError, setEmailError] = useState(false);
   const [emailTakenError, setEmailTakenError] = useState(false);
 
@@ -110,29 +87,17 @@ export function PageOne() {
   const monthField = useRef<HTMLSelectElement>(null);
 
   // * If a focusedField is specified, automatically focus
-  // * that field, and tell redux.
+  // * that field
   useEffect(() => {
     if (focusedField === "name") nameField.current?.focus();
     if (focusedField === "email") emailField.current?.focus();
     if (focusedField === "month") monthField.current?.focus();
   }, [focusedField]);
 
-  // * Debounced error checking on the username field to be used with handleNameChange
-  const debouncedUsernameTakenCheck = useCallback(
-    _.debounce((username: string) => {
-      // Query server to see if it's taken...
-      // The actual error checking will be handled by a useEffect
-      usernameTaken({ variables: { username } });
-    }, 500),
-    []
-  );
-
   // * Update redux state as the name input field changes + error checking.
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
-    setNameTakenError(false);
     value.length === 0 ? setNameError(true) : setNameError(false);
-    debouncedUsernameTakenCheck(value);
     dispatch(nameChanged(value));
   };
 
@@ -192,12 +157,11 @@ export function PageOne() {
         value={name}
         onChange={handleNameChange}
         maxLength={50}
-        error={nameError || nameTakenError}
+        error={nameError}
         ref={nameField}
       />
       <Details>
         {nameError && <ErrorText>What's your name?</ErrorText>}
-        {nameTakenError && <ErrorText>Name has already been taken.</ErrorText>}
         <Counter>{`${name.length}/50`}</Counter>
       </Details>
       <InputBox
