@@ -63,6 +63,7 @@ export function PageOne() {
         // a check for is still the email that is currently inputted
         if (data.emailTaken === true && email_variables?.email === email)
           setEmailTakenError(true);
+        else setWaitingForValidation(false);
       },
     }
   );
@@ -71,6 +72,7 @@ export function PageOne() {
   const [nameError, setNameError] = useState(false);
   const [emailError, setEmailError] = useState(false);
   const [emailTakenError, setEmailTakenError] = useState(false);
+  const [waitingForValidation, setWaitingForValidation] = useState(true);
 
   // * Bring in form state from Redux
   const { name, email, day, month, year } = useSelector(
@@ -122,6 +124,10 @@ export function PageOne() {
     setEmailError(false);
     setEmailTakenError(false);
 
+    // we need to wait until the email is validated before letting the next
+    // button be clickable...
+    setWaitingForValidation(true);
+
     // Check for errors (valid email + not taken) debounced
     debouncedEmailErrorCheck(value);
 
@@ -135,7 +141,8 @@ export function PageOne() {
     const fieldsNonEmpty = name && email && day && month && year;
     const noErrors = !nameError && !emailError && !emailTakenError;
 
-    if (fieldsNonEmpty && noErrors) dispatch(currentPageIsValid());
+    if (fieldsNonEmpty && noErrors && !waitingForValidation)
+      dispatch(currentPageIsValid());
     else dispatch(currentPageIsInvalid());
   }, [
     name,
@@ -147,6 +154,7 @@ export function PageOne() {
     emailError,
     emailTakenError,
     dispatch,
+    waitingForValidation,
   ]);
 
   return (
