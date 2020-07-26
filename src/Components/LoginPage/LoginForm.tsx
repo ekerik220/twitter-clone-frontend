@@ -53,7 +53,7 @@ export function LoginForm() {
       )}
       <Form>
         <StyledInputBox
-          title="Phone, email, or username"
+          title="Email, or username"
           value={loginName}
           onChange={(e) => setLoginName(e.target.value)}
           type="username"
