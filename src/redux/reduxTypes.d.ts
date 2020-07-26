@@ -24,4 +24,7 @@ interface RootState {
     open: boolean;
     file: string;
   };
+  globalUI: {
+    tooltipOpen: boolean;
+  };
 }

@@ -5,12 +5,14 @@ import storage from "redux-persist/lib/storage";
 import signup from "./slices/signupSlice";
 import user from "./slices/userSlice";
 import imageEditor from "./slices/imageEditorSlice";
+import globalUI from "./slices/globalUISlice";
 
 // Make the root reducer
 const rootReducer = combineReducers({
   signup,
   user,
   imageEditor,
+  globalUI,
 });
 
 // Set up redux persist
