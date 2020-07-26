@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import { LoginPage, SignupModal } from "Components";
 import { ImageEditor } from "./ImageEditor/ImageEditor";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-import { Home } from "./Home/Home";
+import { Main } from "./Main/Main";
 import { StandaloneLoginPage } from "./StandaloneLoginPage/StandaloneLoginPage";
 
 function App() {
@@ -24,8 +24,8 @@ function App() {
         <Route path="/login">
           <StandaloneLoginPage />
         </Route>
-        <Route path="/home">
-          <Home />
+        <Route path={["/home", "/explore"]}>
+          <Main />
         </Route>
       </Switch>
       {/* Modals */}
