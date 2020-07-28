@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import React from "react";
 import styled from "styled-components";
 import { Tooltip } from "./Tooltip";
 import { UserInfo } from "./UserInfo";
-import { tooltipWasOpened } from "redux/slices/globalUISlice";
+import { tooltipWasOpened, tooltipWasClosed } from "redux/slices/globalUISlice";
 import { useDispatch, useSelector } from "react-redux";
 
 /**
@@ -16,9 +16,13 @@ export function User() {
     (state: RootState) => state.globalUI.tooltipOpen
   );
 
+  const handleClick = () => {
+    tooltipOpen ? dispatch(tooltipWasClosed()) : dispatch(tooltipWasOpened());
+  };
+
   return (
     <Tooltip visible={tooltipOpen}>
-      <Container onClick={() => dispatch(tooltipWasOpened())}>
+      <Container onClick={handleClick}>
         <UserInfo />
       </Container>
     </Tooltip>
