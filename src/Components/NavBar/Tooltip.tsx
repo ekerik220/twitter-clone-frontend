@@ -26,7 +26,7 @@ export function Tooltip(props: Props) {
   return (
     <>
       {tooltipOpen && (
-        <TooltipCloser onClick={() => dispatch(tooltipWasClosed())} />
+        <TooltipBackground onClick={() => dispatch(tooltipWasClosed())} />
       )}
       <Wrapper>
         <Container visible={props.visible}>
@@ -49,13 +49,13 @@ export function Tooltip(props: Props) {
   );
 }
 
-const TooltipCloser = styled.div`
-  width: 100vw;
-  height: 100vh;
-  position: absolute;
+const TooltipBackground = styled.div`
+  width: 100%;
+  height: 100%;
+  position: fixed;
   top: 0;
   left: 0;
-  z-index: 1;
+  z-index: 0;
 `;
 
 type ContainerProps = { visible?: boolean };
