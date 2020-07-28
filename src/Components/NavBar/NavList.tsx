@@ -1,6 +1,6 @@
 import React from "react";
 import styled, { css } from "styled-components";
-import { useLocation } from "react-router-dom";
+import { useLocation, Link } from "react-router-dom";
 import {
   HomeIcon,
   ExploreIcon,
@@ -21,49 +21,49 @@ export function NavList() {
 
   return (
     <>
-      <NavItem href="/home" selected={path === "/home"}>
+      <NavItem to="/home" selected={path === "/home"}>
         <NavItemHoverWrap>
           <HomeIcon />
           <NavText>Home</NavText>
         </NavItemHoverWrap>
       </NavItem>
-      <NavItem href="/explore" selected={path === "/explore"}>
+      <NavItem to="/explore" selected={path === "/explore"}>
         <NavItemHoverWrap>
           <ExploreIcon />
           <NavText>Explore</NavText>
         </NavItemHoverWrap>
       </NavItem>
-      <NavItem selected={path === "/notifications"}>
+      <NavItem to="/notifications" selected={path === "/notifications"}>
         <NavItemHoverWrap>
           <NotificationsIcon />
           <NavText>Notifications</NavText>
         </NavItemHoverWrap>
       </NavItem>
-      <NavItem selected={path === "/messages"}>
+      <NavItem to="/messages" selected={path === "/messages"}>
         <NavItemHoverWrap>
           <MessagesIcon />
           <NavText>Messages</NavText>
         </NavItemHoverWrap>
       </NavItem>
-      <NavItem selected={path === "/bookmarks"}>
+      <NavItem to="/bookmarks" selected={path === "/bookmarks"}>
         <NavItemHoverWrap>
           <BookmarksIcon />
           <NavText>Bookmarks</NavText>
         </NavItemHoverWrap>
       </NavItem>
-      <NavItem selected={path === "/lists"}>
+      <NavItem to="/lists" selected={path === "/lists"}>
         <NavItemHoverWrap>
           <ListsIcon />
           <NavText>Lists</NavText>
         </NavItemHoverWrap>
       </NavItem>
-      <NavItem selected={path === "/profile"}>
+      <NavItem to="/profile" selected={path === "/profile"}>
         <NavItemHoverWrap>
           <ProfileIcon />
           <NavText>Profile</NavText>
         </NavItemHoverWrap>
       </NavItem>
-      <NavItem selected={path === "/more"}>
+      <NavItem to="/more" selected={path === "/more"}>
         <NavItemHoverWrap>
           <MoreIcon />
           <NavText>More</NavText>
@@ -95,7 +95,7 @@ const NavItemHoverWrap = styled.div`
 `;
 
 type NavItemProps = { selected: boolean };
-const NavItem = styled.a.attrs({ role: "button" })<NavItemProps>`
+const NavItem = styled(Link).attrs({ role: "button" })<NavItemProps>`
   display: flex;
   align-items: center;
   padding: 2px 0;
