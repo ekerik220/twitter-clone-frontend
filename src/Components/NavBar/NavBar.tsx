@@ -25,12 +25,14 @@ export function NavBar() {
 
 const Container = styled.div`
   display: flex;
+  flex-shrink: 0;
   align-items: flex-end;
   flex-direction: column;
-  min-width: 80px;
+  width: 80px;
+  background: white;
 
   @media only screen and (min-width: 1280px) {
-    width: 100%;
+    width: 300px;
   }
 `;
 
@@ -89,7 +91,7 @@ const StyledButton = styled(Button)`
     width: calc(100% - 25px);
 
     &:before {
-      content: "Tweet";
+      content: "Twat";
     }
   }
 `;
