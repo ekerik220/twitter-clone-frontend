@@ -13,3 +13,4 @@ export { BookmarksIcon } from "./BookmarksIcon";
 export { ListsIcon } from "./ListsIcon";
 export { ProfileIcon } from "./ProfileIcon";
 export { MoreIcon } from "./MoreIcon";
+export { ImageIcon } from "./ImageIcon";
