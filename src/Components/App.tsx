@@ -24,7 +24,7 @@ function App() {
         <Route path="/login">
           <StandaloneLoginPage />
         </Route>
-        <Route path={["/home", "/explore"]}>
+        <Route path={["/home", "/explore", "/comments"]}>
           <Main />
         </Route>
       </Switch>

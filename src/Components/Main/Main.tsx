@@ -4,6 +4,7 @@ import { useSelector } from "react-redux";
 import styled from "styled-components";
 import { NavBar } from "Components/NavBar/NavBar";
 import { Home } from "Components/Home/Home";
+import { CommentPage } from "Components/CommentPage/CommentPage";
 
 export function Main() {
   const history = useHistory();
@@ -25,6 +26,9 @@ export function Main() {
           <Home />
         </Route>
         <Route path="/explore"></Route>
+        <Route path="/comments">
+          <CommentPage />
+        </Route>
       </Switch>
       <DiscoverArea></DiscoverArea>
     </Container>
