@@ -1,14 +1,15 @@
-import React, { useState } from "react";
+import React from "react";
 import styled from "styled-components";
 import { InputArea } from "./InputArea";
 import { Tweet } from "Components/Tweet/Tweet";
 import { gql, useQuery } from "@apollo/client";
 
 // query for logged in user's tweet list
-const GET_TWEETS = gql`
+export const GET_TWEETS = gql`
   query GetTweets {
     self {
       tweets {
+        id
         username
         handle
         avatar
@@ -20,24 +21,16 @@ const GET_TWEETS = gql`
 `;
 
 export function Home() {
-  // Local state
-  const [tweets, setTweets] = useState<Tweet[]>([]);
-
   // * GQL query to get logged in user's tweet list
-  const { loading } = useQuery(GET_TWEETS, {
-    onCompleted: (data) => {
-      setTweets(data.self.tweets);
-      //dispatch(loadedTweets(tweets));
-    },
-  });
+  const { data } = useQuery(GET_TWEETS);
 
   return (
     <Container>
       <Header>Home</Header>
       <TweetArea>
         <InputArea />
-        {tweets.map((tweet) => (
-          <Tweet tweet={tweet} />
+        {data?.self.tweets.map((tweet: Tweet) => (
+          <Tweet key={tweet.id} tweet={tweet} />
         ))}
       </TweetArea>
     </Container>
