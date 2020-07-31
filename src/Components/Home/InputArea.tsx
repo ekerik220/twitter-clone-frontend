@@ -1,14 +1,34 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import styled from "styled-components";
 import { Avatar } from "Components/Avatar/Avatar";
 import { ImageIcon } from "assets/icons";
 import { Button } from "Components/Button/Button";
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
+import { gql, useMutation } from "@apollo/client";
+
+const ADD_TWEET = gql`
+  mutation AddTweet($body: String!) {
+    addTweet(body: $body) {
+      id
+    }
+  }
+`;
 
 export function InputArea() {
   // Local state
   const [input, setInput] = useState<string | null>("");
+
+  // refs
+  const inputRef = useRef<HTMLSpanElement>(null);
+
+  // * GQL Mutation to add a tweet to DB
+  const [addTweet, { loading }] = useMutation(ADD_TWEET, {
+    onCompleted: () => {
+      setInput("");
+      if (inputRef.current) inputRef.current.innerHTML = "";
+    },
+  });
 
   return (
     <Container>
@@ -19,6 +39,8 @@ export function InputArea() {
         <Input
           onInput={(e) => setInput(e.currentTarget.textContent)}
           data-placeholder="What's happening?"
+          ref={inputRef}
+          contentEditable={!loading}
         ></Input>
         <Dashboard>
           <DashboardLeft>
@@ -50,7 +72,10 @@ export function InputArea() {
                 })}
               />
             )}
-            <TweetButton disabled={!input || input.length > 280}>
+            <TweetButton
+              disabled={!input || input.length > 280 || loading}
+              onClick={() => addTweet({ variables: { body: input } })}
+            >
               Twat
             </TweetButton>
           </DashboardRight>
@@ -78,7 +103,7 @@ const InputBox = styled.div`
   width: calc(100% - 65px);
 `;
 
-const Input = styled.span.attrs({ role: "textbox", contentEditable: true })`
+const Input = styled.span.attrs({ role: "textbox" })`
   position: relative;
   width: 100%;
   white-space: pre-line;
