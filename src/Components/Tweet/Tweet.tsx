@@ -8,7 +8,11 @@ import { RetweetIcon } from "assets/icons/RetweetIcon";
 import { ActionsIcon } from "assets/icons/ActionsIcon";
 import { useHistory } from "react-router-dom";
 
-export function Tweet() {
+type PropTypes = {
+  tweet: Tweet;
+};
+
+export function Tweet(props: PropTypes) {
   const history = useHistory();
 
   return (
@@ -19,17 +23,14 @@ export function Tweet() {
       <ContentBox>
         <Header>
           <User>
-            <Username>username</Username>
-            <UserHandle>@handle</UserHandle>
+            <Username>{props.tweet.username}</Username>
+            <UserHandle>@{props.tweet.handle}</UserHandle>
           </User>
           <DownArrowHover>
             <DownArrowIcon />
           </DownArrowHover>
         </Header>
-        <TweetBody>
-          test text test text test text test text test text test text test text
-          test text test text test text test text{" "}
-        </TweetBody>
+        <TweetBody>{props.tweet.body}</TweetBody>
         <ImageArea></ImageArea>
         <ButtonsArea>
           <ButtonWrapper>
