@@ -13,6 +13,12 @@ const ADD_TWEET = gql`
   mutation AddTweet($body: String!) {
     addTweet(body: $body) {
       id
+      userID
+      username
+      handle
+      avatar
+      date
+      body
     }
   }
 `;
@@ -29,9 +35,21 @@ export function InputArea() {
 
   // * GQL Mutation to add a tweet to DB
   const [addTweet, { loading }] = useMutation(ADD_TWEET, {
-    onCompleted: () => {
+    onCompleted: (data) => {
       setInput("");
       if (inputRef.current) inputRef.current.innerHTML = "";
+    },
+    update: (store, { data }) => {
+      type GetTweetsQuery = { self: { tweets: Tweet[] } };
+      const tweetList = store.readQuery<GetTweetsQuery>({ query: GET_TWEETS })
+        ?.self.tweets;
+
+      if (tweetList) {
+        store.writeQuery({
+          query: GET_TWEETS,
+          data: { self: { tweets: [data.addTweet, ...tweetList] } },
+        });
+      }
     },
   });
 

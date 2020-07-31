@@ -1,5 +1,5 @@
 type Tweet = {
-  id?: string;
+  id: string;
   userID: string;
   username: string;
   handle: string;
