@@ -2,8 +2,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 const initialState: RootState["user"] = {
   token: null,
-  avatar:
-    "https://abs.twimg.com/sticky/default_profile_images/default_profile_400x400.png",
+  avatar: "",
 };
 
 const slice = createSlice({

@@ -18,7 +18,7 @@ export function Tweet(props: PropTypes) {
   return (
     <Container onClick={() => history.push("/comments")}>
       <AvatarBox>
-        <Avatar width="50px" height="50px" />
+        <Avatar width="50px" height="50px" url={props.tweet.avatar} />
       </AvatarBox>
       <ContentBox>
         <Header>

@@ -9,26 +9,27 @@ import {
   ActionsIcon,
 } from "assets/icons";
 
-export function TopTweet() {
+type PropTypes = {
+  tweet: Tweet;
+};
+
+export function TopTweet(props: PropTypes) {
   return (
     <Container>
       <ReasonArea></ReasonArea>
       <UserArea>
         <UserWrap>
-          <Avatar width="50px" height="50px" />
+          <Avatar width="50px" height="50px" url={props.tweet.avatar} />
           <UserInfo>
-            <UserName>User name</UserName>
-            <UserHandle>@handle</UserHandle>
+            <UserName>{props.tweet.username}</UserName>
+            <UserHandle>@{props.tweet.handle}</UserHandle>
           </UserInfo>
         </UserWrap>
         <DownArrowHover>
           <DownArrowIcon />
         </DownArrowHover>
       </UserArea>
-      <Body>
-        Random text Random text Random text Random text Random text Random text
-        Random text Random text Random text Random text Random text{" "}
-      </Body>
+      <Body>{props.tweet.body}</Body>
       <Date>4:25 PM · Jul 28, 2020</Date>
       <RetweetsLikes>
         <Count>

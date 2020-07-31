@@ -9,19 +9,24 @@ interface Props
   > {
   width?: string;
   height?: string;
+  url?: string;
 }
 
 export function Avatar(props: Props) {
-  const avatarURL = useSelector((state: RootState) => state.user.avatar);
-
   return (
     <Container width={props.width} height={props.height}>
-      <Img src={avatarURL} />
+      <Img
+        src={
+          props.url ||
+          "https://abs.twimg.com/sticky/default_profile_images/default_profile_400x400.png"
+        }
+      />
     </Container>
   );
 }
 
-const Container = styled.div<Props>`
+type ContainerProps = { width?: string; height?: string };
+const Container = styled.div<ContainerProps>`
   display: flex;
   justify-content: center;
   align-items: center;

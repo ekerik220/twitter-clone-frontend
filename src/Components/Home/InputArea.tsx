@@ -6,6 +6,8 @@ import { Button } from "Components/Button/Button";
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
 import { gql, useMutation } from "@apollo/client";
+import { useSelector } from "react-redux";
+import { GET_TWEETS } from "Components/Home/Home";
 
 const ADD_TWEET = gql`
   mutation AddTweet($body: String!) {
@@ -18,6 +20,9 @@ const ADD_TWEET = gql`
 export function InputArea() {
   // Local state
   const [input, setInput] = useState<string | null>("");
+
+  // Redux state
+  const avatarURL = useSelector((state: RootState) => state.user.avatar);
 
   // refs
   const inputRef = useRef<HTMLSpanElement>(null);
@@ -33,7 +38,7 @@ export function InputArea() {
   return (
     <Container>
       <AvatarBox>
-        <Avatar width="50px" height="50px" />
+        <Avatar width="50px" height="50px" url={avatarURL} />
       </AvatarBox>
       <InputBox>
         <Input

@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { Avatar } from "Components/Avatar/Avatar";
 import { DownArrow } from "assets/icons";
+import { useSelector } from "react-redux";
 
 interface Props
   extends React.DetailedHTMLProps<
@@ -13,10 +14,13 @@ interface Props
  * Renders the user information. Used in User component.
  */
 export function UserInfo(props: Props) {
+  // Redux state
+  const avatarURL = useSelector((state: RootState) => state.user.avatar);
+
   return (
     <Container className={props.className}>
       <Info>
-        <Avatar width="40px" height="40px" />
+        <Avatar width="40px" height="40px" url={avatarURL} />
         <UsernameBox>
           <Username>Name</Username>
           <TwitterHandle>Handle</TwitterHandle>
