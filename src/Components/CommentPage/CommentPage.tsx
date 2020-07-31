@@ -6,7 +6,7 @@ import { BackButton } from "Components/BackButton/BackButton";
 import { useHistory } from "react-router-dom";
 
 export function CommentPage() {
-  const history = useHistory();
+  const history = useHistory<Tweet>();
 
   return (
     <Container>
@@ -15,15 +15,7 @@ export function CommentPage() {
         <span>Twat</span>
       </Header>
       <TweetArea>
-        <TopTweet />
-        <Tweet />
-        <Tweet />
-        <Tweet />
-        <Tweet />
-        <Tweet />
-        <Tweet />
-        <Tweet />
-        <Tweet />
+        <TopTweet tweet={history.location.state} />
       </TweetArea>
     </Container>
   );

@@ -15,8 +15,13 @@ type PropTypes = {
 export function Tweet(props: PropTypes) {
   const history = useHistory();
 
+  // * Click handler. Redirects to comments page for this tweet.
+  const handleClick = () => {
+    history.push("/comments", props.tweet);
+  };
+
   return (
-    <Container onClick={() => history.push("/comments")}>
+    <Container onClick={handleClick}>
       <AvatarBox>
         <Avatar width="50px" height="50px" url={props.tweet.avatar} />
       </AvatarBox>
