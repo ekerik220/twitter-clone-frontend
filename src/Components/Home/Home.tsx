@@ -1,18 +1,44 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { InputArea } from "./InputArea";
+import { Tweet } from "Components/Tweet/Tweet";
+import { gql, useQuery } from "@apollo/client";
+
+// query for logged in user's tweet list
+const GET_TWEETS = gql`
+  query GetTweets {
+    self {
+      tweets {
+        username
+        handle
+        avatar
+        date
+        body
+      }
+    }
+  }
+`;
 
 export function Home() {
+  // Local state
+  const [tweets, setTweets] = useState<Tweet[]>([]);
+
+  // * GQL query to get logged in user's tweet list
+  const { loading } = useQuery(GET_TWEETS, {
+    onCompleted: (data) => {
+      setTweets(data.self.tweets);
+      //dispatch(loadedTweets(tweets));
+    },
+  });
+
   return (
     <Container>
       <Header>Home</Header>
       <TweetArea>
         <InputArea />
-        <Tweet />
-        <Tweet />
-        <Tweet />
-        <Tweet />
-        <Tweet />
+        {tweets.map((tweet) => (
+          <Tweet tweet={tweet} />
+        ))}
       </TweetArea>
     </Container>
   );
@@ -49,13 +75,4 @@ const TweetArea = styled.div`
   flex-direction: column;
   margin-top: 50px;
   background-color: ${({ theme }) => theme.colors.lightGrey};
-`;
-
-const Tweet = styled.div`
-  display: flex;
-  width: 100%;
-  max-width: 600px;
-  height: 200px;
-  border: ${({ theme }) => `1px solid ${theme.colors.lightGrey}`};
-  background-color: white;
 `;
