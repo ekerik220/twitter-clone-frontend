@@ -4,9 +4,32 @@ import { Tweet } from "Components/Tweet/Tweet";
 import { TopTweet } from "./TopTweet";
 import { BackButton } from "Components/BackButton/BackButton";
 import { useHistory } from "react-router-dom";
+import { gql, useQuery } from "@apollo/client";
+
+const GET_TWEET = gql`
+  query GetTweet($id: ID!) {
+    tweet(id: $id) {
+      id
+      username
+      handle
+      avatar
+      date
+      body
+      likeIDs
+    }
+  }
+`;
 
 export function CommentPage() {
+  // The tweet we clicked on to get here is in history.location.state
   const history = useHistory<Tweet>();
+
+  // The tweet in history is just a copy of the state it was in when we clicked on it
+  // so we should use it's ID to get a version of it that will be sensitive to changes
+  // ASAP by querying for it
+  const { data } = useQuery(GET_TWEET, {
+    variables: { id: history.location.state.id },
+  });
 
   return (
     <Container>
@@ -15,7 +38,7 @@ export function CommentPage() {
         <span>Twat</span>
       </Header>
       <TweetArea>
-        <TopTweet tweet={history.location.state} />
+        <TopTweet tweet={data?.tweet || history.location.state} />
       </TweetArea>
     </Container>
   );

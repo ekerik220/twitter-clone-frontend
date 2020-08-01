@@ -8,4 +8,5 @@ type Tweet = {
   body: string;
   images?: [string];
   replyingToID?: string;
+  likeIDs: [string];
 };

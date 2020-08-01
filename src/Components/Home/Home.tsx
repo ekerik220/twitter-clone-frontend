@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import { InputArea } from "./InputArea";
 import { Tweet } from "Components/Tweet/Tweet";
@@ -15,6 +15,7 @@ export const GET_TWEETS = gql`
         avatar
         date
         body
+        likeIDs
       }
     }
   }

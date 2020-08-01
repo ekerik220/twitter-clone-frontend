@@ -1,12 +1,13 @@
 import React from "react";
 import styled from "styled-components";
 import { Avatar } from "Components/Avatar/Avatar";
-import { DownArrow } from "assets/icons";
+import { DownArrow, LikeIconFilled } from "assets/icons";
 import { CommentIcon } from "assets/icons/CommentIcon";
 import { LikeIcon } from "assets/icons/LikeIcon";
 import { RetweetIcon } from "assets/icons/RetweetIcon";
 import { ActionsIcon } from "assets/icons/ActionsIcon";
 import { useHistory } from "react-router-dom";
+import { useLikeInfo } from "utils/customHooks/useLikeInfo";
 
 type PropTypes = {
   tweet: Tweet;
@@ -14,6 +15,9 @@ type PropTypes = {
 
 export function Tweet(props: PropTypes) {
   const history = useHistory();
+
+  // hook that gives us methods / state relating to the 'liked' state of the tweet
+  const { handleLikeClick, liked, likeCount } = useLikeInfo(props.tweet);
 
   // * Click handler. Redirects to comments page for this tweet.
   const handleClick = () => {
@@ -51,10 +55,10 @@ export function Tweet(props: PropTypes) {
             <span>100</span>
           </ButtonWrapper>
           <ButtonWrapper color="pink">
-            <IconHover>
-              <LikeIcon />
+            <IconHover onClick={handleLikeClick}>
+              {liked ? <LikeIconFilled /> : <LikeIcon />}
             </IconHover>
-            <span>100</span>
+            <span>{likeCount}</span>
           </ButtonWrapper>
           <ButtonWrapper>
             <IconHover>

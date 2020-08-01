@@ -7,13 +7,17 @@ import {
   RetweetIcon,
   LikeIcon,
   ActionsIcon,
+  LikeIconFilled,
 } from "assets/icons";
+import { useLikeInfo } from "utils/customHooks/useLikeInfo";
 
 type PropTypes = {
   tweet: Tweet;
 };
 
 export function TopTweet(props: PropTypes) {
+  const { handleLikeClick, liked, likeCount } = useLikeInfo(props.tweet);
+
   return (
     <Container>
       <ReasonArea></ReasonArea>
@@ -36,7 +40,7 @@ export function TopTweet(props: PropTypes) {
           <BoldBlackText>100</BoldBlackText> Retwats
         </Count>
         <Count>
-          <BoldBlackText>100</BoldBlackText> Likes
+          <BoldBlackText>{likeCount}</BoldBlackText> Likes
         </Count>
       </RetweetsLikes>
       <ButtonsArea>
@@ -46,8 +50,8 @@ export function TopTweet(props: PropTypes) {
         <IconHover color="green">
           <RetweetIconSVG />
         </IconHover>
-        <IconHover color="pink">
-          <LikeIconSVG />
+        <IconHover color="pink" onClick={handleLikeClick}>
+          {liked ? <LikeIconFilledSVG /> : <LikeIconSVG />}
         </IconHover>
         <IconHover>
           <ActionsIconSVG />
@@ -198,6 +202,11 @@ const CommentIconSVG = styled(CommentIcon)`
 `;
 
 const LikeIconSVG = styled(LikeIcon)`
+  height: 23px;
+  width: 23px;
+`;
+
+const LikeIconFilledSVG = styled(LikeIconFilled)`
   height: 23px;
   width: 23px;
 `;
