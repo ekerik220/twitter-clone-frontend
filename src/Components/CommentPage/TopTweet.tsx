@@ -10,6 +10,7 @@ import {
   LikeIconFilled,
 } from "assets/icons";
 import { useLikeInfo } from "utils/customHooks/useLikeInfo";
+import moment from "moment";
 
 type PropTypes = {
   tweet: Tweet;
@@ -17,6 +18,10 @@ type PropTypes = {
 
 export function TopTweet(props: PropTypes) {
   const { handleLikeClick, liked, likeCount } = useLikeInfo(props.tweet);
+
+  const formatDate = (date: Date) => {
+    return moment(date).format("LT · MMM D, YYYY");
+  };
 
   return (
     <Container>
@@ -34,7 +39,7 @@ export function TopTweet(props: PropTypes) {
         </DownArrowHover>
       </UserArea>
       <Body>{props.tweet.body}</Body>
-      <Date>4:25 PM · Jul 28, 2020</Date>
+      <Date>{formatDate(props.tweet.date)}</Date>
       <RetweetsLikes>
         <Count>
           <BoldBlackText>100</BoldBlackText> Retwats
