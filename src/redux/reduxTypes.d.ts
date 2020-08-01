@@ -18,6 +18,7 @@ interface RootState {
   };
   user: {
     token: string | null;
+    userID: string;
     avatar: string;
   };
   imageEditor: {
