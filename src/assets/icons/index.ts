@@ -18,3 +18,4 @@ export { ActionsIcon } from "./ActionsIcon";
 export { CommentIcon } from "./CommentIcon";
 export { LikeIcon } from "./LikeIcon";
 export { RetweetIcon } from "./RetweetIcon";
+export { LikeIconFilled } from "./LikeIconFilled";
