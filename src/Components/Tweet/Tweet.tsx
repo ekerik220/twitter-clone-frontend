@@ -8,6 +8,8 @@ import { RetweetIcon } from "assets/icons/RetweetIcon";
 import { ActionsIcon } from "assets/icons/ActionsIcon";
 import { useHistory } from "react-router-dom";
 import { useLikeInfo } from "utils/customHooks/useLikeInfo";
+import { clickedCommentButton } from "redux/slices/commentSlice";
+import { useDispatch } from "react-redux";
 
 type PropTypes = {
   tweet: Tweet;
@@ -15,6 +17,7 @@ type PropTypes = {
 
 export function Tweet(props: PropTypes) {
   const history = useHistory();
+  const dispatch = useDispatch();
 
   // hook that gives us methods / state relating to the 'liked' state of the tweet
   const { handleLikeClick, liked, likeCount } = useLikeInfo(props.tweet);
@@ -22,6 +25,12 @@ export function Tweet(props: PropTypes) {
   // * Click handler. Redirects to comments page for this tweet.
   const handleClick = () => {
     history.push("/comments", props.tweet);
+  };
+
+  // * Click handler for comment button
+  const handleCommentClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    e.stopPropagation();
+    dispatch(clickedCommentButton(props.tweet));
   };
 
   return (
@@ -39,14 +48,19 @@ export function Tweet(props: PropTypes) {
             <DownArrowIcon />
           </DownArrowHover>
         </Header>
+        {props.tweet.replyingTo && (
+          <ReplyingTo>
+            Replying to <BlueText>@{props.tweet.replyingTo}</BlueText>
+          </ReplyingTo>
+        )}
         <TweetBody>{props.tweet.body}</TweetBody>
         <ImageArea></ImageArea>
         <ButtonsArea>
-          <ButtonWrapper>
+          <ButtonWrapper onClick={handleCommentClick}>
             <IconHover>
               <CommentIcon />
             </IconHover>
-            <span>100</span>
+            <span>{props.tweet.commentIDs.length}</span>
           </ButtonWrapper>
           <ButtonWrapper color="green">
             <IconHover>
@@ -54,10 +68,8 @@ export function Tweet(props: PropTypes) {
             </IconHover>
             <span>100</span>
           </ButtonWrapper>
-          <ButtonWrapper color="pink">
-            <IconHover onClick={handleLikeClick}>
-              {liked ? <LikeIconFilled /> : <LikeIcon />}
-            </IconHover>
+          <ButtonWrapper color="pink" onClick={handleLikeClick}>
+            <IconHover>{liked ? <LikeIconFilled /> : <LikeIcon />}</IconHover>
             <span>{likeCount}</span>
           </ButtonWrapper>
           <ButtonWrapper>
@@ -102,12 +114,21 @@ const Header = styled.div`
   width: 100%;
 `;
 
+const ReplyingTo = styled.span`
+  margin-top: -7px;
+  margin-bottom: 5px;
+  color: ${({ theme }) => theme.colors.greyText};
+  width: fit-content;
+  cursor: pointer;
+`;
+
 const UserHandle = styled.span`
   color: ${({ theme }) => theme.colors.greyText};
 `;
 
 const Username = styled.span`
   font-weight: bold;
+  margin-right: 5px;
 `;
 
 const User = styled.span`
@@ -161,7 +182,6 @@ const ButtonsArea = styled.div`
   margin-top: 10px;
 `;
 
-type ButtonWrapperProps = { color?: string };
 const ButtonWrapper = styled.div.attrs({ role: "button" })`
   display: flex;
   align-items: center;
@@ -186,4 +206,8 @@ const ButtonWrapper = styled.div.attrs({ role: "button" })`
         ? theme.colors.pinkText
         : theme.colors.blueMain};
   }
+`;
+
+const BlueText = styled.span`
+  color: ${({ theme }) => theme.colors.blueMain};
 `;

@@ -10,5 +10,6 @@ export const tweetDetailsFragment = gql`
     body
     likeIDs
     commentIDs
+    replyingTo
   }
 `;

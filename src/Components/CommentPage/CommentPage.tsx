@@ -7,10 +7,13 @@ import { useHistory } from "react-router-dom";
 import { gql, useQuery } from "@apollo/client";
 import { tweetDetailsFragment } from "utils/fragments";
 
-const GET_TWEET = gql`
+export const GET_TWEET = gql`
   query GetTweet($id: ID!) {
     tweet(id: $id) {
       ...tweetDetails
+      comments {
+        ...tweetDetails
+      }
     }
   }
   ${tweetDetailsFragment}
@@ -35,6 +38,9 @@ export function CommentPage() {
       </Header>
       <TweetArea>
         <TopTweet tweet={data?.tweet || history.location.state} />
+        {data?.tweet.comments.map((tweet: Tweet) => (
+          <Tweet key={tweet.id} tweet={tweet} />
+        ))}
       </TweetArea>
     </Container>
   );
@@ -43,6 +49,10 @@ export function CommentPage() {
 const Container = styled.div`
   max-width: 600px;
   width: 100%;
+  height: 100%;
+  border-left: 1px solid;
+  border-right: 1px solid;
+  border-color: ${({ theme }) => theme.colors.lightGrey};
 
   @media only screen and (min-width: 1000px) {
     min-width: 600px;
@@ -55,7 +65,7 @@ const Header = styled.header`
   background-color: white;
   font-size: 19px;
   width: inherit;
-  max-width: 600px;
+  max-width: 599px;
   height: 50px;
   font-weight: bold;
   border: ${({ theme }) => `1px solid ${theme.colors.lightGrey}`};

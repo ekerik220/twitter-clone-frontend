@@ -6,6 +6,7 @@ import signup from "./slices/signupSlice";
 import user from "./slices/userSlice";
 import imageEditor from "./slices/imageEditorSlice";
 import globalUI from "./slices/globalUISlice";
+import comment from "./slices/commentSlice";
 
 // Make the root reducer
 const rootReducer = combineReducers({
@@ -13,6 +14,7 @@ const rootReducer = combineReducers({
   user,
   imageEditor,
   globalUI,
+  comment,
 });
 
 // Set up redux persist

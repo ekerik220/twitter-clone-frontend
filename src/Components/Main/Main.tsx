@@ -5,6 +5,7 @@ import styled from "styled-components";
 import { NavBar } from "Components/NavBar/NavBar";
 import { Home } from "Components/Home/Home";
 import { CommentPage } from "Components/CommentPage/CommentPage";
+import { CommentModal } from "Components/CommentModal/CommentModal";
 
 export function Main() {
   const history = useHistory();
@@ -12,6 +13,9 @@ export function Main() {
   // Redux state
   // if we have a token we're logged in
   const loggedIn = useSelector((state: RootState) => state.user.token);
+  const commentModalOpen = useSelector(
+    (state: RootState) => state.comment.modalOpen
+  );
 
   // * redirect to '/' if not logged in
   useEffect(() => {
@@ -31,6 +35,9 @@ export function Main() {
         </Route>
       </Switch>
       <DiscoverArea></DiscoverArea>
+
+      {/* Modals */}
+      {commentModalOpen && <CommentModal />}
     </Container>
   );
 }

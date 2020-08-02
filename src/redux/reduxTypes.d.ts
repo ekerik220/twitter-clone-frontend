@@ -28,4 +28,8 @@ interface RootState {
   globalUI: {
     tooltipOpen: boolean;
   };
+  comment: {
+    modalOpen: boolean;
+    tweet: Tweet | null;
+  };
 }

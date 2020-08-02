@@ -11,12 +11,16 @@ import {
 } from "assets/icons";
 import { useLikeInfo } from "utils/customHooks/useLikeInfo";
 import moment from "moment";
+import { useDispatch } from "react-redux";
+import { clickedCommentButton } from "redux/slices/commentSlice";
 
 type PropTypes = {
   tweet: Tweet;
 };
 
 export function TopTweet(props: PropTypes) {
+  const dispatch = useDispatch();
+
   const { handleLikeClick, liked, likeCount } = useLikeInfo(props.tweet);
 
   const formatDate = (date: Date) => {
@@ -49,7 +53,7 @@ export function TopTweet(props: PropTypes) {
         </Count>
       </RetweetsLikes>
       <ButtonsArea>
-        <IconHover>
+        <IconHover onClick={() => dispatch(clickedCommentButton(props.tweet))}>
           <CommentIconSVG />
         </IconHover>
         <IconHover color="green">

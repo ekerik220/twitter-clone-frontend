@@ -7,6 +7,7 @@ type Tweet = {
   date: Date;
   body: string;
   images?: [string];
-  replyingToID?: string;
+  replyingTo?: string;
   likeIDs: [string];
+  commentIDs: [string];
 };
