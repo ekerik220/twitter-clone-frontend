@@ -8,19 +8,15 @@ import "react-circular-progressbar/dist/styles.css";
 import { gql, useMutation } from "@apollo/client";
 import { useSelector } from "react-redux";
 import { GET_TWEETS } from "Components/Home/Home";
+import { tweetDetailsFragment } from "utils/fragments";
 
 const ADD_TWEET = gql`
   mutation AddTweet($body: String!) {
     addTweet(body: $body) {
-      id
-      userID
-      username
-      handle
-      avatar
-      date
-      body
+      ...tweetDetails
     }
   }
+  ${tweetDetailsFragment}
 `;
 
 export function InputArea() {

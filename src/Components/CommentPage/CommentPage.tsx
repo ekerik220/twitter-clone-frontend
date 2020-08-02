@@ -5,19 +5,15 @@ import { TopTweet } from "./TopTweet";
 import { BackButton } from "Components/BackButton/BackButton";
 import { useHistory } from "react-router-dom";
 import { gql, useQuery } from "@apollo/client";
+import { tweetDetailsFragment } from "utils/fragments";
 
 const GET_TWEET = gql`
   query GetTweet($id: ID!) {
     tweet(id: $id) {
-      id
-      username
-      handle
-      avatar
-      date
-      body
-      likeIDs
+      ...tweetDetails
     }
   }
+  ${tweetDetailsFragment}
 `;
 
 export function CommentPage() {

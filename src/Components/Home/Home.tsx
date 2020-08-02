@@ -3,22 +3,18 @@ import styled from "styled-components";
 import { InputArea } from "./InputArea";
 import { Tweet } from "Components/Tweet/Tweet";
 import { gql, useQuery } from "@apollo/client";
+import { tweetDetailsFragment } from "utils/fragments";
 
 // query for logged in user's tweet list
 export const GET_TWEETS = gql`
   query GetTweets {
     self {
       tweets {
-        id
-        username
-        handle
-        avatar
-        date
-        body
-        likeIDs
+        ...tweetDetails
       }
     }
   }
+  ${tweetDetailsFragment}
 `;
 
 export function Home() {
