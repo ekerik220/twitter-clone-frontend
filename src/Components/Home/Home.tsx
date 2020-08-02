@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import styled from "styled-components";
 import { InputArea } from "./InputArea";
 import { Tweet } from "Components/Tweet/Tweet";
@@ -38,6 +38,12 @@ const Container = styled.div`
   max-width: 600px;
   width: 100%;
 
+  height: 100%;
+
+  border-left: 1px solid;
+  border-right: 1px solid;
+  border-color: ${({ theme }) => theme.colors.lightGrey};
+
   @media only screen and (min-width: 1000px) {
     min-width: 600px;
   }
@@ -49,7 +55,7 @@ const Header = styled.header`
   background-color: white;
   font-size: 19px;
   width: inherit;
-  max-width: 600px;
+  max-width: 599px;
   height: 50px;
   font-weight: bold;
   border: ${({ theme }) => `1px solid ${theme.colors.lightGrey}`};
