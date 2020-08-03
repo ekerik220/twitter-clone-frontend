@@ -6,6 +6,7 @@ import { NavBar } from "Components/NavBar/NavBar";
 import { Home } from "Components/Home/Home";
 import { CommentPage } from "Components/CommentPage/CommentPage";
 import { CommentModal } from "Components/CommentModal/CommentModal";
+import { RetweetWithCommentModal } from "Components/RetweetWithCommentModal/RetweetWithCommentModal";
 
 export function Main() {
   const history = useHistory();
@@ -15,6 +16,9 @@ export function Main() {
   const loggedIn = useSelector((state: RootState) => state.user.token);
   const commentModalOpen = useSelector(
     (state: RootState) => state.comment.modalOpen
+  );
+  const retweetModalOpen = useSelector(
+    (state: RootState) => state.retweet.modalOpen
   );
 
   // * redirect to '/' if not logged in
@@ -38,6 +42,7 @@ export function Main() {
 
       {/* Modals */}
       {commentModalOpen && <CommentModal />}
+      {retweetModalOpen && <RetweetWithCommentModal />}
     </Container>
   );
 }

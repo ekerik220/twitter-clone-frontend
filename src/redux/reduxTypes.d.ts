@@ -32,4 +32,8 @@ interface RootState {
     modalOpen: boolean;
     tweet: Tweet | null;
   };
+  retweet: {
+    modalOpen: boolean;
+    tweet: Tweet | null;
+  };
 }

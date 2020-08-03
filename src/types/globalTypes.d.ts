@@ -10,4 +10,6 @@ type Tweet = {
   replyingTo?: string;
   likeIDs: [string];
   commentIDs: [string];
+  retweetParent?: string;
+  retweetIDs: [string];
 };

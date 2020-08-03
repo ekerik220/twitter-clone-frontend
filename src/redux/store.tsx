@@ -7,6 +7,7 @@ import user from "./slices/userSlice";
 import imageEditor from "./slices/imageEditorSlice";
 import globalUI from "./slices/globalUISlice";
 import comment from "./slices/commentSlice";
+import retweet from "./slices/retweetSlice";
 
 // Make the root reducer
 const rootReducer = combineReducers({
@@ -15,6 +16,7 @@ const rootReducer = combineReducers({
   imageEditor,
   globalUI,
   comment,
+  retweet,
 });
 
 // Set up redux persist

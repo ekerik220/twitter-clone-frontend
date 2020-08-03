@@ -6,11 +6,21 @@ import {
   ActionsIcon,
   LikeIconFilled,
   LikeIcon,
+  BoldRetweetIcon,
 } from "assets/icons";
 import { RetweetDropdown } from "./RetweetDropdown";
 import { useDispatch } from "react-redux";
 import { useLikeInfo } from "utils/customHooks/useLikeInfo";
 import { clickedCommentButton } from "redux/slices/commentSlice";
+import { gql, useQuery } from "@apollo/client";
+
+export const SELF = gql`
+  query Self {
+    self {
+      retweetParentIDs
+    }
+  }
+`;
 
 type PropTypes = { tweet: Tweet };
 
@@ -22,6 +32,9 @@ function ButtonsArea(props: PropTypes) {
 
   // hook that gives us methods / state relating to the 'liked' state of the tweet
   const { handleLikeClick, liked, likeCount } = useLikeInfo(props.tweet);
+
+  // * GQL query to get logged in user's retweetIDs list
+  const { data } = useQuery(SELF);
 
   // * Click handler for comment button
   const handleCommentClick = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -41,18 +54,30 @@ function ButtonsArea(props: PropTypes) {
         <IconHover>
           <CommentIcon />
         </IconHover>
-        <span>{props.tweet.commentIDs.length}</span>
+        <Text>{props.tweet.commentIDs.length}</Text>
       </ButtonWrapper>
       <ButtonWrapper color="green" onClick={handleRetweetClick}>
         {retweetDropdown && <RetweetDropdown tweet={props.tweet} />}
         <IconHover>
-          <RetweetIcon />
+          {data && data.self.retweetParentIDs.includes(props.tweet.id) ? (
+            <BoldRetweetIcon />
+          ) : (
+            <RetweetIcon />
+          )}
         </IconHover>
-        <span>100</span>
+        <Text
+          color={
+            data && data.self.retweetParentIDs.includes(props.tweet.id)
+              ? "green"
+              : undefined
+          }
+        >
+          {props.tweet.retweetIDs.length}
+        </Text>
       </ButtonWrapper>
       <ButtonWrapper color="pink" onClick={handleLikeClick}>
         <IconHover>{liked ? <LikeIconFilled /> : <LikeIcon />}</IconHover>
-        <span>{likeCount}</span>
+        <Text color={liked ? "pink" : undefined}>{likeCount}</Text>
       </ButtonWrapper>
       <ButtonWrapper>
         <IconHover>
@@ -108,4 +133,14 @@ const ButtonWrapper = styled.div.attrs({ role: "button" })`
         ? theme.colors.pinkText
         : theme.colors.blueMain};
   }
+`;
+
+type TextProps = { color?: string };
+const Text = styled.span<TextProps>`
+  color: ${({ theme, color }) =>
+    color === "green"
+      ? theme.colors.greenText
+      : color === "pink"
+      ? theme.colors.pinkText
+      : "black"};
 `;

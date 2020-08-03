@@ -6,13 +6,16 @@ import { Button } from "Components/Button/Button";
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
 import { gql, useMutation } from "@apollo/client";
-import { useSelector } from "react-redux";
-import { GET_TWEETS } from "Components/Home/Home";
+import { useSelector, useDispatch } from "react-redux";
 import { tweetDetailsFragment } from "utils/fragments";
+import { RetweetBox } from "Components/Tweet/RetweetBox";
+import { GET_TWEETS } from "Components/Home/Home";
+import { GET_TWEET } from "Components/CommentPage/CommentPage";
+import { closedRetweetModal } from "redux/slices/retweetSlice";
 
-const ADD_TWEET = gql`
-  mutation AddTweet($body: String!) {
-    addTweet(body: $body) {
+const ADD_RETWEET = gql`
+  mutation AddRetweet($parentID: ID!, $body: String!) {
+    addRetweet(parentID: $parentID, body: $body) {
       ...tweetDetails
     }
   }
@@ -20,34 +23,73 @@ const ADD_TWEET = gql`
 `;
 
 export function InputArea() {
+  const dispatch = useDispatch();
+
   // Local state
   const [input, setInput] = useState<string | null>("");
 
   // Redux state
   const avatarURL = useSelector((state: RootState) => state.user.avatar);
+  const tweet = useSelector((state: RootState) => state.retweet.tweet) as Tweet;
 
   // refs
   const inputRef = useRef<HTMLSpanElement>(null);
 
-  // * GQL Mutation to add a tweet to DB
-  const [addTweet, { loading }] = useMutation(ADD_TWEET, {
-    onCompleted: (data) => {
-      setInput("");
-      if (inputRef.current) inputRef.current.innerHTML = "";
-    },
-    update: (store, { data }) => {
-      type GetTweetsQuery = { self: { tweets: Tweet[] } };
-      const tweetList = store.readQuery<GetTweetsQuery>({
-        query: GET_TWEETS,
-        variables: { getRetweets: true },
-      })?.self.tweets;
+  // * Click handler for the Retwat button
+  const handeRetwatClick = () => {
+    addRetweet();
+    dispatch(closedRetweetModal());
+  };
 
-      if (tweetList) {
-        store.writeQuery({
+  // * GQL Mutation to add a retweet with comment
+  const [addRetweet] = useMutation(ADD_RETWEET, {
+    variables: { parentID: tweet.id, body: input },
+    update: (store, { data }) => {
+      // Update tweets returned from self { tweets } queries
+      try {
+        type GetTweetsQuery = { self: { tweets: Tweet[] } };
+        const tweetList = store.readQuery<GetTweetsQuery>({
           query: GET_TWEETS,
-          data: { self: { tweets: [data.addTweet, ...tweetList] } },
-        });
+          variables: { getRetweets: true },
+        })?.self.tweets;
+
+        if (tweetList) {
+          store.writeQuery({
+            query: GET_TWEETS,
+            data: {
+              self: {
+                __typename: "User",
+                tweets: [data.addRetweet, ...tweetList],
+              },
+            },
+          });
+        }
+      } catch (err) {
+        console.log(err);
       }
+
+      // Update the retweetIDs list for parent tweet
+      store.writeFragment({
+        id: tweet.id,
+        fragment: gql`
+          fragment ParentTweet on Tweet {
+            retweetIDs
+          }
+        `,
+        data: { retweetIDs: [data.addRetweet.id, ...tweet.retweetIDs] },
+      });
+
+      // Update queries for this tweet with the new retweetID list
+      store.writeQuery({
+        query: GET_TWEET,
+        variables: { id: tweet.id },
+        data: {
+          tweet: {
+            ...tweet,
+            retweetIDs: [data.addRetweet.id, ...tweet.retweetIDs],
+          },
+        },
+      });
     },
   });
 
@@ -59,10 +101,11 @@ export function InputArea() {
       <InputBox>
         <Input
           onInput={(e) => setInput(e.currentTarget.textContent)}
-          data-placeholder="What's happening?"
+          data-placeholder="Add a comment"
           ref={inputRef}
-          contentEditable={!loading}
+          contentEditable={true}
         ></Input>
+        <RetweetBox noInteract tweet={tweet} />
         <Dashboard>
           <DashboardLeft>
             <ImageIconHover>
@@ -94,10 +137,10 @@ export function InputArea() {
               />
             )}
             <TweetButton
-              disabled={!input || input.length > 280 || loading}
-              onClick={() => addTweet({ variables: { body: input } })}
+              disabled={!input || input.length > 280}
+              onClick={handeRetwatClick}
             >
-              Twat
+              Retwat
             </TweetButton>
           </DashboardRight>
         </Dashboard>
@@ -108,10 +151,11 @@ export function InputArea() {
 
 const Container = styled.div`
   display: flex;
-  border: ${({ theme }) => `1px solid ${theme.colors.lightGrey}`};
   padding: 10px;
+  margin: 0 5px 5px 5px;
+  margin-bottom: 5px;
   background-color: white;
-  margin-bottom: 10px;
+  overflow-y: auto;
 `;
 
 const AvatarBox = styled.div`

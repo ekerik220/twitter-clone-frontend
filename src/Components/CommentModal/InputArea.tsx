@@ -74,8 +74,10 @@ export function InputArea() {
       // Update tweets returned from self { tweets } queries
       try {
         type GetTweetsQuery = { self: { tweets: Tweet[] } };
-        const tweetList = store.readQuery<GetTweetsQuery>({ query: GET_TWEETS })
-          ?.self.tweets;
+        const tweetList = store.readQuery<GetTweetsQuery>({
+          query: GET_TWEETS,
+          variables: { getRetweets: true },
+        })?.self.tweets;
 
         if (tweetList) {
           store.writeQuery({

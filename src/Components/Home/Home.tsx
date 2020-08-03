@@ -7,9 +7,10 @@ import { tweetDetailsFragment } from "utils/fragments";
 
 // query for logged in user's tweet list
 export const GET_TWEETS = gql`
-  query GetTweets {
+  query GetTweets($getRetweets: Boolean) {
     self {
-      tweets {
+      retweetParentIDs
+      tweets(getRetweets: $getRetweets) {
         ...tweetDetails
       }
     }
@@ -19,7 +20,7 @@ export const GET_TWEETS = gql`
 
 export function Home() {
   // * GQL query to get logged in user's tweet list
-  const { data } = useQuery(GET_TWEETS);
+  const { data } = useQuery(GET_TWEETS, { variables: { getRetweets: true } });
 
   return (
     <Container>

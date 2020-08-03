@@ -3,6 +3,7 @@ import { gql } from "@apollo/client";
 export const tweetDetailsFragment = gql`
   fragment tweetDetails on Tweet {
     id
+    userID
     username
     handle
     avatar
@@ -11,5 +12,7 @@ export const tweetDetailsFragment = gql`
     likeIDs
     commentIDs
     replyingTo
+    retweetParent
+    retweetIDs
   }
 `;

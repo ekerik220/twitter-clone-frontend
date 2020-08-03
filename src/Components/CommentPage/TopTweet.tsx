@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { Avatar } from "Components/Avatar/Avatar";
 import {
@@ -8,11 +8,22 @@ import {
   LikeIcon,
   ActionsIcon,
   LikeIconFilled,
+  BoldRetweetIcon,
 } from "assets/icons";
 import { useLikeInfo } from "utils/customHooks/useLikeInfo";
 import moment from "moment";
 import { useDispatch } from "react-redux";
 import { clickedCommentButton } from "redux/slices/commentSlice";
+import { RetweetDropdown } from "Components/Tweet/RetweetDropdown";
+import { gql, useQuery } from "@apollo/client";
+
+export const SELF = gql`
+  query Self {
+    self {
+      retweetParentIDs
+    }
+  }
+`;
 
 type PropTypes = {
   tweet: Tweet;
@@ -22,6 +33,17 @@ export function TopTweet(props: PropTypes) {
   const dispatch = useDispatch();
 
   const { handleLikeClick, liked, likeCount } = useLikeInfo(props.tweet);
+
+  // local state
+  const [retweetDropdown, setRetweetDropdown] = useState(false);
+
+  // * GQL query to get logged in user's retweetIDs list
+  const { data } = useQuery(SELF);
+
+  const handleRetweetClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    e.stopPropagation();
+    setRetweetDropdown(!retweetDropdown);
+  };
 
   const formatDate = (date: Date) => {
     return moment(date).format("LT · MMM D, YYYY");
@@ -46,7 +68,7 @@ export function TopTweet(props: PropTypes) {
       <Date>{formatDate(props.tweet.date)}</Date>
       <RetweetsLikes>
         <Count>
-          <BoldBlackText>100</BoldBlackText> Retwats
+          <BoldBlackText>{props.tweet.retweetIDs.length}</BoldBlackText> Retwats
         </Count>
         <Count>
           <BoldBlackText>{likeCount}</BoldBlackText> Likes
@@ -56,8 +78,13 @@ export function TopTweet(props: PropTypes) {
         <IconHover onClick={() => dispatch(clickedCommentButton(props.tweet))}>
           <CommentIconSVG />
         </IconHover>
-        <IconHover color="green">
-          <RetweetIconSVG />
+        <IconHover color="green" onClick={handleRetweetClick}>
+          {retweetDropdown && <RetweetDropdown tweet={props.tweet} />}
+          {data && data.self.retweetParentIDs.includes(props.tweet.id) ? (
+            <BoldRetweetIconSVG />
+          ) : (
+            <RetweetIconSVG />
+          )}
         </IconHover>
         <IconHover color="pink" onClick={handleLikeClick}>
           {liked ? <LikeIconFilledSVG /> : <LikeIconSVG />}
@@ -183,6 +210,7 @@ const IconHover = styled.div<IconHoverProps>`
   display: flex;
   justify-content: center;
   align-items: center;
+  position: relative;
   width: 35px;
   height: 35px;
   border-radius: 50%;
@@ -226,6 +254,11 @@ const RetweetIconSVG = styled(RetweetIcon)`
 `;
 
 const ActionsIconSVG = styled(ActionsIcon)`
+  height: 23px;
+  width: 23px;
+`;
+
+const BoldRetweetIconSVG = styled(BoldRetweetIcon)`
   height: 23px;
   width: 23px;
 `;
