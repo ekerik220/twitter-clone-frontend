@@ -21,3 +21,4 @@ export { RetweetIcon } from "./RetweetIcon";
 export { LikeIconFilled } from "./LikeIconFilled";
 export { CrossIcon } from "./CrossIcon";
 export { PencilIcon } from "./PencilIcon";
+export { BoldRetweetIcon } from "./BoldRetweetIcon";
