@@ -8,6 +8,7 @@ import imageEditor from "./slices/imageEditorSlice";
 import globalUI from "./slices/globalUISlice";
 import comment from "./slices/commentSlice";
 import retweet from "./slices/retweetSlice";
+import tweetModal from "./slices/tweetModalSlice";
 
 // Make the root reducer
 const rootReducer = combineReducers({
@@ -17,6 +18,7 @@ const rootReducer = combineReducers({
   globalUI,
   comment,
   retweet,
+  tweetModal,
 });
 
 // Set up redux persist

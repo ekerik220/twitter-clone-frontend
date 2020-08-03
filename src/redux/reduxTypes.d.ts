@@ -36,4 +36,7 @@ interface RootState {
     modalOpen: boolean;
     tweet: Tweet | null;
   };
+  tweetModal: {
+    modalOpen: boolean;
+  };
 }

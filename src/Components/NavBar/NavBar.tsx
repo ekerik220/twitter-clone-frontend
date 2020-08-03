@@ -4,11 +4,15 @@ import { Button } from "Components/Button/Button";
 import { NavList } from "./NavList";
 import { TwitterBird } from "assets/icons";
 import { User } from "./User";
+import { useDispatch } from "react-redux";
+import { clickedTweetButton } from "redux/slices/tweetModalSlice";
 
 /**
  * Side nav bar top level component
  */
 export function NavBar() {
+  const dispatch = useDispatch();
+
   return (
     <Container>
       <Nav>
@@ -16,7 +20,9 @@ export function NavBar() {
           <TwitterBirdSVG />
         </TwitterBirdHoverWrap>
         <NavList />
-        <StyledButton></StyledButton>
+        <StyledButton
+          onClick={() => dispatch(clickedTweetButton())}
+        ></StyledButton>
         <User />
       </Nav>
     </Container>
