@@ -35,15 +35,12 @@ export function InputArea() {
   // refs
   const inputRef = useRef<HTMLSpanElement>(null);
 
-  // * Click handler for the Retwat button
-  const handeRetwatClick = () => {
-    addRetweet();
-    dispatch(closedRetweetModal());
-  };
-
   // * GQL Mutation to add a retweet with comment
-  const [addRetweet] = useMutation(ADD_RETWEET, {
+  const [addRetweet, { loading }] = useMutation(ADD_RETWEET, {
     variables: { parentID: tweet.id, body: input },
+    onCompleted: () => {
+      dispatch(closedRetweetModal());
+    },
     update: (store, { data }) => {
       // Update tweets returned from self { tweets } queries
       try {
@@ -103,7 +100,7 @@ export function InputArea() {
           onInput={(e) => setInput(e.currentTarget.textContent)}
           data-placeholder="Add a comment"
           ref={inputRef}
-          contentEditable={true}
+          contentEditable={!loading}
         ></Input>
         <RetweetBox noInteract tweet={tweet} />
         <Dashboard>
@@ -137,8 +134,8 @@ export function InputArea() {
               />
             )}
             <TweetButton
-              disabled={!input || input.length > 280}
-              onClick={handeRetwatClick}
+              disabled={!input || input.length > 280 || loading}
+              onClick={() => addRetweet()}
             >
               Retwat
             </TweetButton>

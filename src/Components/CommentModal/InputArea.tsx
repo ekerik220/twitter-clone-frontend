@@ -34,15 +34,12 @@ export function InputArea() {
   // refs
   const inputRef = useRef<HTMLSpanElement>(null);
 
-  // * Click handler for the reply button
-  const replyClickHanlder = () => {
-    addComment();
-    dispatch(closedCommentModal());
-  };
-
   // * GQL mutation to add a comment to the DB
-  const [addComment] = useMutation(ADD_COMMENT, {
+  const [addComment, { loading }] = useMutation(ADD_COMMENT, {
     variables: { replyingToID: tweet.id, body: input },
+    onCompleted: () => {
+      dispatch(closedCommentModal());
+    },
     update: (store, { data }) => {
       // Update parent tweet's comment list with the new comment
       store.writeFragment({
@@ -115,7 +112,7 @@ export function InputArea() {
           onInput={(e) => setInput(e.currentTarget.textContent)}
           data-placeholder="Twat your reply"
           ref={inputRef}
-          contentEditable={true}
+          contentEditable={!loading}
         ></Input>
         <Dashboard>
           <DashboardLeft>
@@ -148,8 +145,8 @@ export function InputArea() {
               />
             )}
             <ReplyButton
-              disabled={!input || input.length > 280}
-              onClick={replyClickHanlder}
+              disabled={!input || input.length > 280 || loading}
+              onClick={() => addComment()}
             >
               Reply
             </ReplyButton>
