@@ -5,11 +5,12 @@ import { ImageIcon } from "assets/icons";
 import { Button } from "Components/Button/Button";
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { gql, useMutation } from "@apollo/client";
 import { tweetDetailsFragment } from "utils/fragments";
 import { GET_TWEETS } from "Components/Home/Home";
 import { GET_TWEET } from "Components/CommentPage/CommentPage";
+import { closedCommentModal } from "redux/slices/commentSlice";
 
 const ADD_COMMENT = gql`
   mutation AddComment($replyingToID: ID!, $body: String!) {
@@ -21,6 +22,8 @@ const ADD_COMMENT = gql`
 `;
 
 export function InputArea() {
+  const dispatch = useDispatch();
+
   // Local state
   const [input, setInput] = useState<string | null>("");
 
@@ -30,6 +33,12 @@ export function InputArea() {
 
   // refs
   const inputRef = useRef<HTMLSpanElement>(null);
+
+  // * Click handler for the reply button
+  const replyClickHanlder = () => {
+    addComment();
+    dispatch(closedCommentModal());
+  };
 
   // * GQL mutation to add a comment to the DB
   const [addComment] = useMutation(ADD_COMMENT, {
@@ -140,7 +149,7 @@ export function InputArea() {
             )}
             <ReplyButton
               disabled={!input || input.length > 280}
-              onClick={() => addComment()}
+              onClick={replyClickHanlder}
             >
               Reply
             </ReplyButton>
