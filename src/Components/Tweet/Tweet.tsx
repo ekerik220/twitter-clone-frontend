@@ -1,15 +1,10 @@
 import React from "react";
 import styled from "styled-components";
-import { Avatar } from "Components/Avatar/Avatar";
-import { DownArrow, LikeIconFilled } from "assets/icons";
-import { CommentIcon } from "assets/icons/CommentIcon";
-import { LikeIcon } from "assets/icons/LikeIcon";
-import { RetweetIcon } from "assets/icons/RetweetIcon";
-import { ActionsIcon } from "assets/icons/ActionsIcon";
 import { useHistory } from "react-router-dom";
-import { useLikeInfo } from "utils/customHooks/useLikeInfo";
-import { clickedCommentButton } from "redux/slices/commentSlice";
-import { useDispatch } from "react-redux";
+import { Header } from "./Header";
+import { Body } from "./Body";
+import ButtonsArea from "./ButtonsArea";
+import { AvatarBox } from "./AvatarBox";
 
 type PropTypes = {
   tweet: Tweet;
@@ -17,67 +12,24 @@ type PropTypes = {
 
 export function Tweet(props: PropTypes) {
   const history = useHistory();
-  const dispatch = useDispatch();
-
-  // hook that gives us methods / state relating to the 'liked' state of the tweet
-  const { handleLikeClick, liked, likeCount } = useLikeInfo(props.tweet);
 
   // * Click handler. Redirects to comments page for this tweet.
   const handleClick = () => {
     history.push("/comments", props.tweet);
   };
 
-  // * Click handler for comment button
-  const handleCommentClick = (e: React.MouseEvent<HTMLDivElement>) => {
-    e.stopPropagation();
-    dispatch(clickedCommentButton(props.tweet));
-  };
-
   return (
     <Container onClick={handleClick}>
-      <AvatarBox>
-        <Avatar width="50px" height="50px" url={props.tweet.avatar} />
-      </AvatarBox>
+      <AvatarBox tweet={props.tweet} />
       <ContentBox>
-        <Header>
-          <User>
-            <Username>{props.tweet.username}</Username>
-            <UserHandle>@{props.tweet.handle}</UserHandle>
-          </User>
-          <DownArrowHover>
-            <DownArrowIcon />
-          </DownArrowHover>
-        </Header>
+        <Header tweet={props.tweet} />
         {props.tweet.replyingTo && (
           <ReplyingTo>
             Replying to <BlueText>@{props.tweet.replyingTo}</BlueText>
           </ReplyingTo>
         )}
-        <TweetBody>{props.tweet.body}</TweetBody>
-        <ImageArea></ImageArea>
-        <ButtonsArea>
-          <ButtonWrapper onClick={handleCommentClick}>
-            <IconHover>
-              <CommentIcon />
-            </IconHover>
-            <span>{props.tweet.commentIDs.length}</span>
-          </ButtonWrapper>
-          <ButtonWrapper color="green">
-            <IconHover>
-              <RetweetIcon />
-            </IconHover>
-            <span>100</span>
-          </ButtonWrapper>
-          <ButtonWrapper color="pink" onClick={handleLikeClick}>
-            <IconHover>{liked ? <LikeIconFilled /> : <LikeIcon />}</IconHover>
-            <span>{likeCount}</span>
-          </ButtonWrapper>
-          <ButtonWrapper>
-            <IconHover>
-              <ActionsIcon />
-            </IconHover>
-          </ButtonWrapper>
-        </ButtonsArea>
+        <Body tweet={props.tweet} />
+        <ButtonsArea tweet={props.tweet} />
       </ContentBox>
     </Container>
   );
@@ -98,19 +50,9 @@ const Container = styled.div`
   }
 `;
 
-const AvatarBox = styled.div`
-  margin-right: 10px;
-`;
-
 const ContentBox = styled.div`
   display: flex;
   flex-direction: column;
-  width: 100%;
-`;
-
-const Header = styled.div`
-  display: flex;
-  justify-content: space-between;
   width: 100%;
 `;
 
@@ -120,92 +62,6 @@ const ReplyingTo = styled.span`
   color: ${({ theme }) => theme.colors.greyText};
   width: fit-content;
   cursor: pointer;
-`;
-
-const UserHandle = styled.span`
-  color: ${({ theme }) => theme.colors.greyText};
-`;
-
-const Username = styled.span`
-  font-weight: bold;
-  margin-right: 5px;
-`;
-
-const User = styled.span`
-  &:hover {
-    & > ${Username} {
-      text-decoration: underline;
-    }
-  }
-`;
-
-const DownArrowHover = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 27px;
-  width: 27px;
-  border-radius: 50%;
-  transition: background-color 0.2s;
-
-  &:hover {
-    background-color: ${({ theme }) => theme.colors.blueHover};
-  }
-`;
-
-const DownArrowIcon = styled(DownArrow)`
-  color: ${({ theme }) => theme.colors.greyText};
-  height: 15px;
-`;
-
-const TweetBody = styled.div`
-  width: 100%;
-`;
-
-const IconHover = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 35px;
-  height: 35px;
-  border-radius: 50%;
-  transition: background-color 0.2s;
-`;
-
-const ImageArea = styled.div``;
-
-const ButtonsArea = styled.div`
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
-  max-width: 425px;
-  margin-top: 10px;
-`;
-
-const ButtonWrapper = styled.div.attrs({ role: "button" })`
-  display: flex;
-  align-items: center;
-  color: ${({ theme }) => theme.colors.greyText};
-  transition: color 0.2s;
-  width: fit-content;
-
-  &:hover {
-    & > ${IconHover} {
-      background-color: ${({ theme, color }) =>
-        color === "green"
-          ? theme.colors.greenHover
-          : color === "pink"
-          ? theme.colors.pinkHover
-          : theme.colors.blueHover};
-    }
-
-    color: ${({ theme, color }) =>
-      color === "green"
-        ? theme.colors.greenText
-        : color === "pink"
-        ? theme.colors.pinkText
-        : theme.colors.blueMain};
-  }
 `;
 
 const BlueText = styled.span`
