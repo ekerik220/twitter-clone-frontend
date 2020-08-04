@@ -76,6 +76,7 @@ const Nav = styled.div`
   align-items: flex-end;
   padding-left: 10px;
   padding-right: 10px;
+  z-index: 1;
 
   @media only screen and (min-width: 1280px) {
     align-items: flex-start;
