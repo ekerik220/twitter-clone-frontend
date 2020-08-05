@@ -1,0 +1,50 @@
+import React from "react";
+import styled from "styled-components";
+import { SearchBar } from "./SearchBar";
+import { CategorySelector } from "./CategorySelector";
+import { useSelector } from "react-redux";
+import { TrendingCategoryArea } from "./TrendingCategoryArea";
+import { SearchArea } from "./SearchArea";
+
+export function Explore() {
+  // redux state
+  const currentCategory = useSelector(
+    (state: RootState) => state.explore.currentCategory
+  );
+
+  return (
+    <Container>
+      <Header>
+        <SearchBar />
+        <CategorySelector />
+      </Header>
+      {currentCategory === "trending" && <TrendingCategoryArea />}
+      {currentCategory === "search" && <SearchArea />}
+    </Container>
+  );
+}
+
+const Container = styled.div`
+  max-width: 600px;
+  width: 100%;
+  height: 100%;
+  border-left: 1px solid;
+  border-right: 1px solid;
+  border-color: ${({ theme }) => theme.colors.lightGrey};
+
+  @media only screen and (min-width: 1000px) {
+    min-width: 600px;
+  }
+`;
+
+const Header = styled.header`
+  display: flex;
+  flex-direction: column;
+  background-color: white;
+  width: calc(100% - 80px);
+  max-width: 599px;
+  border: ${({ theme }) => `1px solid ${theme.colors.lightGrey}`};
+  border-top: none;
+  position: fixed;
+  z-index: 1;
+`;

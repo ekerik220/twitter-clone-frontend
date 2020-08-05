@@ -39,4 +39,8 @@ interface RootState {
   tweetModal: {
     modalOpen: boolean;
   };
+  explore: {
+    currentCategory: "trending" | "search";
+    searchTerm: string;
+  };
 }

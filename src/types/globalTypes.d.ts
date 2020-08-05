@@ -13,3 +13,8 @@ type Tweet = {
   retweetParent?: string;
   retweetIDs: [string];
 };
+
+type Trend = {
+  hashtag: string;
+  numOfTweets: number;
+};

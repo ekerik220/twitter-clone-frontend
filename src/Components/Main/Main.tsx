@@ -8,6 +8,7 @@ import { CommentPage } from "Components/CommentPage/CommentPage";
 import { CommentModal } from "Components/CommentModal/CommentModal";
 import { RetweetWithCommentModal } from "Components/RetweetWithCommentModal/RetweetWithCommentModal";
 import { TweetModal } from "Components/TweetModal/TweetModal";
+import { Explore } from "Components/Explore/Explore";
 
 export function Main() {
   const history = useHistory();
@@ -37,7 +38,9 @@ export function Main() {
         <Route path="/home">
           <Home />
         </Route>
-        <Route path="/explore"></Route>
+        <Route path="/explore">
+          <Explore />
+        </Route>
         <Route path="/comments">
           <CommentPage />
         </Route>
