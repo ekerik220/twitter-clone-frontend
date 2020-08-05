@@ -55,7 +55,7 @@ const Header = styled.header`
   align-items: center;
   background-color: white;
   font-size: 19px;
-  width: inherit;
+  width: calc(100% - 95px);
   max-width: 599px;
   height: 50px;
   font-weight: bold;
