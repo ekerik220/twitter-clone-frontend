@@ -77,7 +77,7 @@ const Container = styled.div`
   flex-direction: column;
   width: 100%;
   min-height: 100px;
-  border: 1px solid;
+  border-bottom: 1px solid;
   border-color: ${({ theme }) => theme.colors.lightGrey};
   background-color: white;
   padding: 10px;

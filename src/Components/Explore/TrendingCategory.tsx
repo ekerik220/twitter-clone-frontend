@@ -21,7 +21,7 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   padding: 10px;
-  border: 1px solid ${({ theme }) => theme.colors.greyBorder};
+  border-bottom: 1px solid ${({ theme }) => theme.colors.greyBorder};
   transition: background-color 0.2s;
   cursor: pointer;
 
