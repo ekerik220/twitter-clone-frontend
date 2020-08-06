@@ -1,16 +1,30 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import { SearchBar } from "./SearchBar";
 import { CategorySelector } from "./CategorySelector";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { TrendingCategoryArea } from "./TrendingCategoryArea";
 import { SearchArea } from "./SearchArea";
+import {
+  leavingExploreScreen,
+  enteringExploreScreen,
+} from "redux/slices/exploreSlice";
 
 export function Explore() {
+  const dispatch = useDispatch();
+
   // redux state
   const currentCategory = useSelector(
     (state: RootState) => state.explore.currentCategory
   );
+
+  // * Tell redux we're dismounting the explore screen so it can clean up the state
+  useEffect(() => {
+    dispatch(enteringExploreScreen());
+    return () => {
+      dispatch(leavingExploreScreen());
+    };
+  }, [dispatch]);
 
   return (
     <Container>

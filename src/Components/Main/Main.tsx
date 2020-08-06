@@ -9,6 +9,7 @@ import { CommentModal } from "Components/CommentModal/CommentModal";
 import { RetweetWithCommentModal } from "Components/RetweetWithCommentModal/RetweetWithCommentModal";
 import { TweetModal } from "Components/TweetModal/TweetModal";
 import { Explore } from "Components/Explore/Explore";
+import { DiscoverArea } from "Components/DiscoverArea/DiscoverArea";
 
 export function Main() {
   const history = useHistory();
@@ -45,7 +46,7 @@ export function Main() {
           <CommentPage />
         </Route>
       </Switch>
-      <DiscoverArea></DiscoverArea>
+      <DiscoverArea />
 
       {/* Modals */}
       {commentModalOpen && <CommentModal />}
@@ -60,13 +61,4 @@ const Container = styled.div`
   justify-content: center;
   width: 100%;
   height: 100%;
-`;
-
-const DiscoverArea = styled.div`
-  width: 100%;
-  display: none;
-
-  @media only screen and (min-width: 1000px) {
-    display: flex;
-  }
 `;

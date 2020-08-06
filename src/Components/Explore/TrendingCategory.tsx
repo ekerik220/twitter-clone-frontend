@@ -2,14 +2,21 @@ import React from "react";
 import styled from "styled-components";
 import { useDispatch } from "react-redux";
 import { updatedSearchTerm } from "redux/slices/exploreSlice";
+import { useHistory } from "react-router-dom";
 
 type PropTypes = { number: number; hashtag: string; numOfTweets: number };
 
 export function TrendingCategory(props: PropTypes) {
   const dispatch = useDispatch();
+  const history = useHistory();
+
+  const handleClick = () => {
+    dispatch(updatedSearchTerm(props.hashtag));
+    if (history.location.pathname !== "/explore") history.push("/explore");
+  };
 
   return (
-    <Container onClick={() => dispatch(updatedSearchTerm(props.hashtag))}>
+    <Container onClick={handleClick}>
       <GreyText>{props.number} · Trending</GreyText>
       <Hashtag>{props.hashtag}</Hashtag>
       <GreyText>{props.numOfTweets} Twats</GreyText>

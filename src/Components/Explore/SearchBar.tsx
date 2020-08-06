@@ -3,23 +3,34 @@ import styled from "styled-components";
 import { MagnifyingGlassIcon } from "assets/icons";
 import { useDispatch, useSelector } from "react-redux";
 import { updatedSearchTerm } from "redux/slices/exploreSlice";
+import { useHistory } from "react-router-dom";
 
-export function SearchBar() {
+type PropTypes = { className?: string };
+
+export function SearchBar(props: PropTypes) {
   const dispatch = useDispatch();
+  const history = useHistory();
 
   // redux state
   const searchTerm = useSelector(
     (state: RootState) => state.explore.searchTerm
   );
 
+  const enterKeyHandler = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter" && history.location.pathname !== "/explore") {
+      history.push("/explore");
+    }
+  };
+
   return (
-    <Wrapper>
+    <Wrapper className={props.className}>
       <Container>
         <MagnifyingGlassIconSVG />
         <Input
           value={searchTerm}
           onChange={(e) => dispatch(updatedSearchTerm(e.target.value))}
           placeholder="Search Twatter"
+          onKeyPress={enterKeyHandler}
         />
       </Container>
     </Wrapper>

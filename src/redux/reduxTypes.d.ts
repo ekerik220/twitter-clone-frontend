@@ -42,5 +42,6 @@ interface RootState {
   explore: {
     currentCategory: "trending" | "search";
     searchTerm: string;
+    onExploreScreen: boolean;
   };
 }
