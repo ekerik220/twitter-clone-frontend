@@ -3,21 +3,32 @@ import styled from "styled-components";
 import {
   CommentIcon,
   RetweetIcon,
-  ActionsIcon,
   LikeIconFilled,
   LikeIcon,
   BoldRetweetIcon,
+  BookmarksIcon,
 } from "assets/icons";
 import { RetweetDropdown } from "./RetweetDropdown";
 import { useDispatch } from "react-redux";
 import { useLikeInfo } from "utils/customHooks/useLikeInfo";
 import { clickedCommentButton } from "redux/slices/commentSlice";
-import { gql, useQuery } from "@apollo/client";
+import { gql, useQuery, useMutation } from "@apollo/client";
 
 export const SELF = gql`
   query Self {
     self {
+      id
       retweetParentIDs
+      bookmarkIDs
+    }
+  }
+`;
+
+const ADD_REMOVE_BOOKMARK = gql`
+  mutation addOrRemoveBookmark($tweetID: ID!) {
+    addOrRemoveBookmark(tweetID: $tweetID) {
+      id
+      bookmarkIDs
     }
   }
 `;
@@ -36,6 +47,38 @@ function ButtonsArea(props: PropTypes) {
   // * GQL query to get logged in user's retweetIDs list
   const { data } = useQuery(SELF);
 
+  // * GQL mutation to add tweet to user's bookmarkIDs list
+  const [addOrRemoveBookmark] = useMutation(ADD_REMOVE_BOOKMARK, {
+    variables: { tweetID: props.tweet.id },
+    update: (store, { data }) => {
+      // store.writeQuery({
+      //   query: gql`
+      //     query {
+      //       self {
+      //         bookmarkIDs
+      //       }
+      //     }
+      //   `,
+      //   data: { bookmarkIDs: [] },
+      // });
+
+      // console.log(`User:${data.addOrRemoveBookmark.id}`);
+      // console.log(data.addOrRemoveBookmark.bookmarkIDs);
+
+      store.writeFragment({
+        id: `User:${data.addOrRemoveBookmark.id}`,
+        fragment: gql`
+          fragment BookmarkIDs on User {
+            bookmarkIDs
+          }
+        `,
+        data: {
+          bookmarkIDs: data.addOrRemoveBookmark.bookmarkIDs,
+        },
+      });
+    },
+  });
+
   // * Click handler for comment button
   const handleCommentClick = (e: React.MouseEvent<HTMLDivElement>) => {
     e.stopPropagation();
@@ -46,6 +89,11 @@ function ButtonsArea(props: PropTypes) {
   const handleRetweetClick = (e: React.MouseEvent<HTMLDivElement>) => {
     e.stopPropagation();
     setRetweetDropdown(!retweetDropdown);
+  };
+
+  const handleBookmarkClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    e.stopPropagation();
+    addOrRemoveBookmark();
   };
 
   return (
@@ -79,9 +127,11 @@ function ButtonsArea(props: PropTypes) {
         <IconHover>{liked ? <LikeIconFilled /> : <LikeIcon />}</IconHover>
         <Text color={liked ? "pink" : undefined}>{likeCount}</Text>
       </ButtonWrapper>
-      <ButtonWrapper>
+      <ButtonWrapper onClick={handleBookmarkClick}>
         <IconHover>
-          <ActionsIcon />
+          <StyledBookmarkIcon
+            filled={data && data.self.bookmarkIDs.includes(props.tweet.id)}
+          />
         </IconHover>
       </ButtonWrapper>
     </Container>
@@ -143,4 +193,10 @@ const Text = styled.span<TextProps>`
       : color === "pink"
       ? theme.colors.pinkText
       : "black"};
+`;
+
+const StyledBookmarkIcon = styled(BookmarksIcon)`
+  width: 19px;
+  height: 19px;
+  color: ${({ theme, filled }) => (filled ? theme.colors.blueMain : "inherit")};
 `;

@@ -11,9 +11,6 @@ const WHO_TO_FOLLOW = gql`
       handle
       avatar
     }
-    self {
-      followingIDs
-    }
   }
 `;
 

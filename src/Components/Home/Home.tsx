@@ -9,6 +9,7 @@ import { tweetDetailsFragment } from "utils/fragments";
 export const GET_TWEETS = gql`
   query GetTweets($getRetweets: Boolean) {
     self {
+      id
       retweetParentIDs
       tweets(getRetweets: $getRetweets) {
         ...tweetDetails
