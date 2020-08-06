@@ -10,6 +10,7 @@ import { RetweetWithCommentModal } from "Components/RetweetWithCommentModal/Retw
 import { TweetModal } from "Components/TweetModal/TweetModal";
 import { Explore } from "Components/Explore/Explore";
 import { DiscoverArea } from "Components/DiscoverArea/DiscoverArea";
+import { Bookmarks } from "Components/Bookmarks/Bookmarks";
 
 export function Main() {
   const history = useHistory();
@@ -44,6 +45,9 @@ export function Main() {
         </Route>
         <Route path="/comments">
           <CommentPage />
+        </Route>
+        <Route path="/bookmarks">
+          <Bookmarks />
         </Route>
       </Switch>
       <DiscoverArea />

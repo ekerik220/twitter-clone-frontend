@@ -51,20 +51,6 @@ function ButtonsArea(props: PropTypes) {
   const [addOrRemoveBookmark] = useMutation(ADD_REMOVE_BOOKMARK, {
     variables: { tweetID: props.tweet.id },
     update: (store, { data }) => {
-      // store.writeQuery({
-      //   query: gql`
-      //     query {
-      //       self {
-      //         bookmarkIDs
-      //       }
-      //     }
-      //   `,
-      //   data: { bookmarkIDs: [] },
-      // });
-
-      // console.log(`User:${data.addOrRemoveBookmark.id}`);
-      // console.log(data.addOrRemoveBookmark.bookmarkIDs);
-
       store.writeFragment({
         id: `User:${data.addOrRemoveBookmark.id}`,
         fragment: gql`
@@ -77,6 +63,7 @@ function ButtonsArea(props: PropTypes) {
         },
       });
     },
+    refetchQueries: ["Bookmarks"],
   });
 
   // * Click handler for comment button
