@@ -44,4 +44,7 @@ interface RootState {
     searchTerm: string;
     onExploreScreen: boolean;
   };
+  notifications: {
+    currentCategory: "notifications" | "mentions";
+  };
 }

@@ -18,3 +18,14 @@ type Trend = {
   hashtag: string;
   numOfTweets: number;
 };
+
+type NotificationObject = {
+  type: string;
+  user: {
+    id: string;
+    username: string;
+    handle: string;
+    avatar: string;
+  };
+  tweet?: Tweet;
+};

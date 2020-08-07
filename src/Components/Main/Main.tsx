@@ -11,6 +11,7 @@ import { TweetModal } from "Components/TweetModal/TweetModal";
 import { Explore } from "Components/Explore/Explore";
 import { DiscoverArea } from "Components/DiscoverArea/DiscoverArea";
 import { Bookmarks } from "Components/Bookmarks/Bookmarks";
+import { Notifications } from "Components/Notifications/Notifications";
 
 export function Main() {
   const history = useHistory();
@@ -48,6 +49,9 @@ export function Main() {
         </Route>
         <Route path="/bookmarks">
           <Bookmarks />
+        </Route>
+        <Route path="/notifications">
+          <Notifications />
         </Route>
       </Switch>
       <DiscoverArea />

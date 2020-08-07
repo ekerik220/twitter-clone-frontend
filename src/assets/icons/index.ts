@@ -22,3 +22,5 @@ export { LikeIconFilled } from "./LikeIconFilled";
 export { CrossIcon } from "./CrossIcon";
 export { PencilIcon } from "./PencilIcon";
 export { BoldRetweetIcon } from "./BoldRetweetIcon";
+export { PersonFollowIcon } from "./PersonFollowIcon";
+export { PurpleStarIcon } from "./PurpleStarIcon";

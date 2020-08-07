@@ -10,6 +10,7 @@ import comment from "./slices/commentSlice";
 import retweet from "./slices/retweetSlice";
 import tweetModal from "./slices/tweetModalSlice";
 import explore from "./slices/exploreSlice";
+import notifications from "./slices/notificationsSlice";
 
 // Make the root reducer
 const rootReducer = combineReducers({
@@ -21,6 +22,7 @@ const rootReducer = combineReducers({
   retweet,
   tweetModal,
   explore,
+  notifications,
 });
 
 // Set up redux persist
