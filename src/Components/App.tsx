@@ -31,6 +31,8 @@ function App() {
             "/comments",
             "/bookmarks",
             "/notifications",
+            "/lists",
+            "/list",
           ]}
         >
           <Main />

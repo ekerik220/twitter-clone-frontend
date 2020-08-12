@@ -24,6 +24,8 @@ interface RootState {
   imageEditor: {
     open: boolean;
     file: string;
+    heightDivider: number;
+    target: string;
   };
   globalUI: {
     tooltipOpen: boolean;
@@ -46,5 +48,15 @@ interface RootState {
   };
   notifications: {
     currentCategory: "notifications" | "mentions";
+  };
+  listModal: {
+    open: boolean;
+    page: 1 | 2;
+    pageTwoCategory: "suggested" | "members";
+    img: string;
+    listID: string;
+    editMode: boolean;
+    name: string;
+    description: string;
   };
 }

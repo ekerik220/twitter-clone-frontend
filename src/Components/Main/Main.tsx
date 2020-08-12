@@ -12,6 +12,9 @@ import { Explore } from "Components/Explore/Explore";
 import { DiscoverArea } from "Components/DiscoverArea/DiscoverArea";
 import { Bookmarks } from "Components/Bookmarks/Bookmarks";
 import { Notifications } from "Components/Notifications/Notifications";
+import { Lists } from "Components/Lists/Lists";
+import { CreateListModal } from "Components/CreateListModal/CreateListModal";
+import { ListPage } from "Components/ListPage/ListPage";
 
 export function Main() {
   const history = useHistory();
@@ -28,6 +31,7 @@ export function Main() {
   const tweetModalOpen = useSelector(
     (state: RootState) => state.tweetModal.modalOpen
   );
+  const listModalOpen = useSelector((state: RootState) => state.listModal.open);
 
   // * redirect to '/' if not logged in
   useEffect(() => {
@@ -53,6 +57,10 @@ export function Main() {
         <Route path="/notifications">
           <Notifications />
         </Route>
+        <Route path="/lists">
+          <Lists />
+        </Route>
+        <Route path="/list/:listID" component={ListPage} />
       </Switch>
       <DiscoverArea />
 
@@ -60,6 +68,7 @@ export function Main() {
       {commentModalOpen && <CommentModal />}
       {retweetModalOpen && <RetweetWithCommentModal />}
       {tweetModalOpen && <TweetModal />}
+      {listModalOpen && <CreateListModal />}
     </Container>
   );
 }

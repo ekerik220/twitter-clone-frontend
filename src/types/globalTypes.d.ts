@@ -14,6 +14,13 @@ type Tweet = {
   retweetIDs: [string];
 };
 
+type User = {
+  id: string;
+  username: string;
+  handle: string;
+  avatar: string;
+};
+
 type Trend = {
   hashtag: string;
   numOfTweets: number;
@@ -21,11 +28,14 @@ type Trend = {
 
 type NotificationObject = {
   type: string;
-  user: {
-    id: string;
-    username: string;
-    handle: string;
-    avatar: string;
-  };
+  user: User;
   tweet?: Tweet;
+};
+
+type List = {
+  id: string;
+  name: string;
+  description?: string;
+  img?: string;
+  userIDs: [string];
 };

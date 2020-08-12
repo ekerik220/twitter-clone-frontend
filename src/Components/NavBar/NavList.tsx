@@ -63,12 +63,12 @@ export function NavList() {
           <NavText>Profile</NavText>
         </NavItemHoverWrap>
       </NavItem>
-      <NavItem to="/more" selected={path === "/more"}>
+      {/* <NavItem to="/more" selected={path === "/more"}>
         <NavItemHoverWrap>
           <MoreIcon />
           <NavText>More</NavText>
         </NavItemHoverWrap>
-      </NavItem>
+      </NavItem> */}
     </>
   );
 }
