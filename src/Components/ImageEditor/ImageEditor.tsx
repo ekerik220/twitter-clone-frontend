@@ -10,6 +10,7 @@ import { useMutation, gql } from "@apollo/client";
 import { finishedEditingImage } from "redux/slices/imageEditorSlice";
 import { userSetNewAvatar } from "redux/slices/userSlice";
 import { LoadingIcon } from "assets/icons";
+import { imageSelected } from "redux/slices/listModalSlice";
 
 // !TODO Implement my own image cropper (not using croppie).
 // !TODO This is a big job though, so for now we'll use this hacked together version.
@@ -53,17 +54,23 @@ export function ImageEditor() {
 
   // * Redux state
   const imageSrc = useSelector((state: RootState) => state.imageEditor.file);
+  const heightDivider = useSelector(
+    (state: RootState) => state.imageEditor.heightDivider
+  );
+  const target = useSelector((state: RootState) => state.imageEditor.target);
 
   // * Attach croppie to a div (croppieRef points to the div to use).
   useEffect(() => {
     if (croppieRef.current !== null && contAreaRef.current !== null) {
       // We want the viewport (cropping) area to be a square that is 85% of the height
       // of the content area.
-      const dimensions = contAreaRef.current.clientHeight * 0.85;
+      //const dimensions = contAreaRef.current.clientHeight * 0.85;
+      const height = (contAreaRef.current.clientHeight * 0.95) / heightDivider;
+      const width = contAreaRef.current.clientHeight * 0.95;
 
       // Attach croppie to div, setting viewport dimensions
       const croppie = new Croppie(croppieRef.current, {
-        viewport: { height: dimensions, width: dimensions },
+        viewport: { height: height, width: width },
         enableExif: true,
       });
 
@@ -73,7 +80,7 @@ export function ImageEditor() {
       // Bind an image to our croppie
       croppie.bind({ url: imageSrc, zoom: 0 });
     }
-  }, [croppieRef, imageSrc]);
+  }, [croppieRef, imageSrc, heightDivider]);
 
   // * When content area div is resized (this happens when window is resized),
   // * calculate a new view port size and rebind the croppie.
@@ -95,10 +102,11 @@ export function ImageEditor() {
       if (firstResize) setFirstResize(false);
       else {
         // resize the view port manually
-        const vp_dimensions = height * 0.85;
+        const vp_height = (height * 0.95) / heightDivider;
+        const vp_width = height * 0.95;
         vp.setAttribute(
           "style",
-          `width: ${vp_dimensions}px; height: ${vp_dimensions}px;`
+          `width: ${vp_width}px; height: ${vp_height}px;`
         );
 
         // rebind to resize the image
@@ -113,14 +121,16 @@ export function ImageEditor() {
   // * Send off a mutation to the server with the cropped image
   const onClickApply = async () => {
     if (myCroppie) {
-      const image = await myCroppie.result({ type: "blob" });
-      setAvatarImage({ variables: { file: image } });
+      const image = await myCroppie.result({ type: "base64" });
+
+      if (target === "avatar") setAvatarImage({ variables: { file: image } });
+      if (target === "list") dispatch(imageSelected(image));
+      dispatch(finishedEditingImage());
     }
   };
 
   return (
     <React.Fragment>
-      <BlockScrolling />
       <Backdrop></Backdrop>
       <Modal>
         <Header>
@@ -151,16 +161,6 @@ export function ImageEditor() {
   );
 }
 
-// Blocks the background from scrolling by making the height of body
-// equal the view height and hiding any overflow.
-const BlockScrolling = createGlobalStyle`
-  body {
-    height: 100vh;
-    overflow-y: hidden;
-    padding-right: 15px;
-  }
-`;
-
 const Backdrop = styled.div`
   position: absolute;
   width: 100%;
@@ -182,7 +182,7 @@ const Modal = styled.div`
   height: 90%;
   background: white;
   border-radius: 15px;
-  z-index: 1;
+  z-index: 100;
 `;
 
 const Header = styled.div`
