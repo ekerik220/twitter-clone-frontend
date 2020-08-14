@@ -4,12 +4,12 @@ const initialState: RootState["imageEditor"] = {
   open: false,
   file: "",
   heightDivider: 1,
-  target: "",
+  target: "avatar",
 };
 
 type PayloadType = {
   file: string;
-  target: string;
+  target: "list" | "profile" | "avatar";
 };
 
 const slice = createSlice({

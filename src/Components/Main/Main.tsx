@@ -15,6 +15,8 @@ import { Notifications } from "Components/Notifications/Notifications";
 import { Lists } from "Components/Lists/Lists";
 import { CreateListModal } from "Components/CreateListModal/CreateListModal";
 import { ListPage } from "Components/ListPage/ListPage";
+import { Profile } from "Components/Profile/Profile";
+import { EditProfileModal } from "Components/EditProfileModal/EditProfileModal";
 
 export function Main() {
   const history = useHistory();
@@ -32,6 +34,9 @@ export function Main() {
     (state: RootState) => state.tweetModal.modalOpen
   );
   const listModalOpen = useSelector((state: RootState) => state.listModal.open);
+  const editProfileModalOpen = useSelector(
+    (state: RootState) => state.profile.modalOpen
+  );
 
   // * redirect to '/' if not logged in
   useEffect(() => {
@@ -61,6 +66,7 @@ export function Main() {
           <Lists />
         </Route>
         <Route path="/list/:listID" component={ListPage} />
+        <Route path="/profile/:handle" component={Profile} />
       </Switch>
       <DiscoverArea />
 
@@ -69,6 +75,7 @@ export function Main() {
       {retweetModalOpen && <RetweetWithCommentModal />}
       {tweetModalOpen && <TweetModal />}
       {listModalOpen && <CreateListModal />}
+      {editProfileModalOpen && <EditProfileModal />}
     </Container>
   );
 }

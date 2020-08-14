@@ -26,3 +26,4 @@ export { PersonFollowIcon } from "./PersonFollowIcon";
 export { PurpleStarIcon } from "./PurpleStarIcon";
 export { EllipsisIcon } from "./EllipsisIcon";
 export { AddListIcon } from "./AddListIcon";
+export { CalendarIcon } from "./CalendarIcon";

@@ -30,6 +30,7 @@ export function useLikeInfo(tweet: Tweet) {
         data: { likeIDs: data.addOrRemoveLike },
       });
     },
+    refetchQueries: ["GetUser"],
   });
 
   // * useEffect to monitor whether this tweet is liked by the user or not

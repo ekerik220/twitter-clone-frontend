@@ -1,27 +1,20 @@
 import "croppie/croppie.css";
 import React, { useState, useEffect, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import styled, { createGlobalStyle } from "styled-components";
+import styled from "styled-components";
 import { Button } from "Components/Button/Button";
 import { BackButton } from "Components/BackButton/BackButton";
 import Croppie from "croppie";
 import ReactResizeDetector from "react-resize-detector";
-import { useMutation, gql } from "@apollo/client";
 import { finishedEditingImage } from "redux/slices/imageEditorSlice";
-import { userSetNewAvatar } from "redux/slices/userSlice";
-import { LoadingIcon } from "assets/icons";
 import { imageSelected } from "redux/slices/listModalSlice";
+import {
+  profileImgSelected,
+  avatarImgSelected,
+} from "redux/slices/profileSlice";
 
 // !TODO Implement my own image cropper (not using croppie).
 // !TODO This is a big job though, so for now we'll use this hacked together version.
-
-const SET_AVATAR_IMAGE = gql`
-  mutation SetAvatarImage($file: Upload!) {
-    setAvatarImage(file: $file) {
-      avatar
-    }
-  }
-`;
 
 /**
  * Image cropping componenet
@@ -36,15 +29,6 @@ const SET_AVATAR_IMAGE = gql`
  */
 export function ImageEditor() {
   const dispatch = useDispatch();
-
-  // * GQL Mutation
-  const [setAvatarImage, { loading }] = useMutation(SET_AVATAR_IMAGE, {
-    onCompleted: (data) => {
-      const avatar = data.setAvatarImage.avatar;
-      dispatch(userSetNewAvatar(avatar));
-      dispatch(finishedEditingImage());
-    },
-  });
 
   // * Local state and refs
   const contAreaRef = useRef<HTMLDivElement>(null);
@@ -123,8 +107,10 @@ export function ImageEditor() {
     if (myCroppie) {
       const image = await myCroppie.result({ type: "base64" });
 
-      if (target === "avatar") setAvatarImage({ variables: { file: image } });
       if (target === "list") dispatch(imageSelected(image));
+      if (target === "profile") dispatch(profileImgSelected(image));
+      if (target === "avatar") dispatch(avatarImgSelected(image));
+
       dispatch(finishedEditingImage());
     }
   };
@@ -140,22 +126,12 @@ export function ImageEditor() {
           </HeaderLeftWrapper>
           <ApplyButton onClick={onClickApply}>Apply</ApplyButton>
         </Header>
-        {loading ? (
-          <Loading>
-            <StyledLoadingIcon />
-          </Loading>
-        ) : (
-          <ContentAreaWrapper>
-            <ContentArea ref={contAreaRef}>
-              <div ref={croppieRef}></div>
-              <ReactResizeDetector
-                handleWidth
-                handleHeight
-                onResize={onResize}
-              />
-            </ContentArea>
-          </ContentAreaWrapper>
-        )}
+        <ContentAreaWrapper>
+          <ContentArea ref={contAreaRef}>
+            <div ref={croppieRef}></div>
+            <ReactResizeDetector handleWidth handleHeight onResize={onResize} />
+          </ContentArea>
+        </ContentAreaWrapper>
       </Modal>
     </React.Fragment>
   );
@@ -223,15 +199,4 @@ const ContentArea = styled.div`
 const HeaderLeftWrapper = styled.div`
   display: flex;
   align-items: center;
-`;
-
-const Loading = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100%;
-`;
-
-const StyledLoadingIcon = styled(LoadingIcon)`
-  height: 25px;
 `;

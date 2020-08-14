@@ -12,6 +12,7 @@ import tweetModal from "./slices/tweetModalSlice";
 import explore from "./slices/exploreSlice";
 import notifications from "./slices/notificationsSlice";
 import listModal from "./slices/listModalSlice";
+import profile from "./slices/profileSlice";
 
 // Make the root reducer
 const rootReducer = combineReducers({
@@ -25,6 +26,7 @@ const rootReducer = combineReducers({
   explore,
   notifications,
   listModal,
+  profile,
 });
 
 // Set up redux persist

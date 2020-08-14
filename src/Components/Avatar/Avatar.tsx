@@ -1,6 +1,5 @@
 import React from "react";
 import styled from "styled-components";
-import { useSelector } from "react-redux";
 
 interface Props
   extends React.DetailedHTMLProps<
@@ -10,11 +9,16 @@ interface Props
   width?: string;
   height?: string;
   url?: string;
+  className?: string;
 }
 
 export function Avatar(props: Props) {
   return (
-    <Container width={props.width} height={props.height}>
+    <Container
+      className={props.className}
+      width={props.width}
+      height={props.height}
+    >
       <Img
         src={
           props.url ||
@@ -34,6 +38,7 @@ const Container = styled.div<ContainerProps>`
   height: ${(props) => props.height};
   border-radius: 50%;
   overflow: hidden;
+  border: 1px solid white;
 `;
 
 const Img = styled.img.attrs({ alt: "User's avatar" })`

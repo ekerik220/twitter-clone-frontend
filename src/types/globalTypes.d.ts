@@ -17,8 +17,10 @@ type Tweet = {
 type User = {
   id: string;
   username: string;
+  bio: string;
   handle: string;
   avatar: string;
+  profileImg: string;
 };
 
 type Trend = {

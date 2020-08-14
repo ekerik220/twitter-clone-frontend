@@ -25,7 +25,7 @@ interface RootState {
     open: boolean;
     file: string;
     heightDivider: number;
-    target: string;
+    target: "list" | "profile" | "avatar";
   };
   globalUI: {
     tooltipOpen: boolean;
@@ -58,5 +58,13 @@ interface RootState {
     editMode: boolean;
     name: string;
     description: string;
+  };
+  profile: {
+    currentCategory: "tweets" | "media" | "likes";
+    modalOpen: boolean;
+    profileImg: string;
+    avatarImg: string;
+    bio: string;
+    username: string;
   };
 }

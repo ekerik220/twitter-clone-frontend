@@ -33,6 +33,7 @@ function App() {
             "/notifications",
             "/lists",
             "/list",
+            "/profile",
           ]}
         >
           <Main />

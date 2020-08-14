@@ -11,6 +11,22 @@ import {
   ProfileIcon,
   MoreIcon,
 } from "assets/icons";
+import { gql, useQuery } from "@apollo/client";
+import { tweetDetailsFragment } from "utils/fragments";
+
+const GET_HANDLE = gql`
+  query {
+    self {
+      id
+      username
+      handle
+      tweets {
+        ...tweetDetails
+      }
+    }
+  }
+  ${tweetDetailsFragment}
+`;
 
 /**
  * List of navigation buttons in the side nav
@@ -18,6 +34,10 @@ import {
 export function NavList() {
   // current react router path
   const path = useLocation().pathname;
+
+  // * Query for the logged in user's handle so we can make the profile
+  // * button point to their profile page.
+  const { data } = useQuery(GET_HANDLE);
 
   return (
     <>
@@ -57,7 +77,10 @@ export function NavList() {
           <NavText>Lists</NavText>
         </NavItemHoverWrap>
       </NavItem>
-      <NavItem to="/profile" selected={path === "/profile"}>
+      <NavItem
+        to={{ pathname: `/profile/${data?.self.handle}`, state: data?.self }}
+        selected={path.startsWith("/profile")}
+      >
         <NavItemHoverWrap>
           <ProfileIcon />
           <NavText>Profile</NavText>
