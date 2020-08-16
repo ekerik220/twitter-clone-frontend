@@ -2,7 +2,18 @@ import React from "react";
 import styled from "styled-components";
 import { Avatar } from "Components/Avatar/Avatar";
 import { DownArrow } from "assets/icons";
-import { useSelector } from "react-redux";
+import { useQuery, gql } from "@apollo/client";
+
+const USER_INFO = gql`
+  query UserInfo {
+    self {
+      id
+      username
+      handle
+      avatar
+    }
+  }
+`;
 
 interface Props
   extends React.DetailedHTMLProps<
@@ -14,16 +25,15 @@ interface Props
  * Renders the user information. Used in User component.
  */
 export function UserInfo(props: Props) {
-  // Redux state
-  const avatarURL = useSelector((state: RootState) => state.user.avatar);
+  const { data } = useQuery(USER_INFO);
 
   return (
     <Container className={props.className}>
       <Info>
-        <Avatar width="40px" height="40px" url={avatarURL} />
+        <Avatar width="40px" height="40px" url={data?.self.avatar} />
         <UsernameBox>
-          <Username>Name</Username>
-          <TwitterHandle>Handle</TwitterHandle>
+          <Username>{data?.self.username}</Username>
+          <TwitterHandle>{data?.self.handle}</TwitterHandle>
         </UsernameBox>
       </Info>
       <DownArrowSVG />

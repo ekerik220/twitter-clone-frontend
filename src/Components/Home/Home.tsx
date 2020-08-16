@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import { InputArea } from "./InputArea";
 import { Tweet } from "Components/Tweet/Tweet";
@@ -22,6 +22,10 @@ export const GET_TWEETS = gql`
 export function Home() {
   // * GQL query to get logged in user's tweet list
   const { data } = useQuery(GET_TWEETS, { variables: { getRetweets: true } });
+
+  useEffect(() => {
+    console.log(data);
+  }, [data]);
 
   return (
     <Container>

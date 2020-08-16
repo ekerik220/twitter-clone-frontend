@@ -3,6 +3,18 @@ import styled from "styled-components";
 import { Avatar } from "Components/Avatar/Avatar";
 import { useDispatch, useSelector } from "react-redux";
 import { tooltipWasClosed } from "redux/slices/globalUISlice";
+import { useQuery, gql } from "@apollo/client";
+
+const USER_INFO = gql`
+  query UserInfo {
+    self {
+      id
+      username
+      handle
+      avatar
+    }
+  }
+`;
 
 interface Props
   extends React.DetailedHTMLProps<
@@ -23,6 +35,8 @@ export function Tooltip(props: Props) {
     (state: RootState) => state.globalUI.tooltipOpen
   );
 
+  const { data } = useQuery(USER_INFO);
+
   return (
     <>
       {tooltipOpen && (
@@ -32,15 +46,14 @@ export function Tooltip(props: Props) {
         <Container visible={props.visible}>
           <TopBox>
             <Info>
-              <Avatar width="40px" height="40px" />
+              <Avatar width="40px" height="40px" url={data?.self.avatar} />
               <UsernameBox>
-                <Username>Name</Username>
-                <TwitterHandle>Handle</TwitterHandle>
+                <Username>{data?.self.username}</Username>
+                <TwitterHandle>{data?.self.handle}</TwitterHandle>
               </UsernameBox>
             </Info>
           </TopBox>
-          <Link>Add an existing account</Link>
-          <Link>Log out @person</Link>
+          <Link>Log out @{data?.self.handle}</Link>
           <BottomArrow></BottomArrow>
         </Container>
         {props.children}

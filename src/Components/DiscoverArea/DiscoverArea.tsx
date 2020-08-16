@@ -28,7 +28,6 @@ export function DiscoverArea() {
 
 const Container = styled.div`
   margin-left: 15px;
-  width: 100%;
   display: none;
   flex-direction: column;
 

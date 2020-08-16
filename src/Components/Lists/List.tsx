@@ -10,6 +10,7 @@ const GET_SELF = gql`
       id
       username
       handle
+      avatar
     }
   }
 `;
@@ -36,11 +37,11 @@ export function List(props: PropTypes) {
 
   return (
     <Container onClick={handleClick}>
-      <Avatar width="50px" height="50px" />
+      <Avatar width="50px" height="50px" url={props.list.img} />
       <Info>
         <Title>{props.list.name}</Title>
         <User>
-          <Avatar width="15px" height="15px" />
+          <Avatar width="15px" height="15px" url={data?.self.avatar} />
           <Username>{data?.self.username}</Username>
           <Handle>@{data?.self.handle}</Handle>
         </User>

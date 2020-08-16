@@ -14,9 +14,10 @@ import {
 } from "redux/slices/listModalSlice";
 import { gql, useMutation } from "@apollo/client";
 import { useHistory } from "react-router-dom";
+import { b64toBlob } from "utils/functions";
 
 const ADD_LIST = gql`
-  mutation AddList($name: String!, $description: String, $img: String) {
+  mutation AddList($name: String!, $description: String, $img: Upload) {
     addList(name: $name, description: $description, img: $img) {
       id
       name
@@ -34,7 +35,7 @@ const UPDATE_LIST = gql`
     $listID: ID!
     $name: String!
     $description: String
-    $img: String
+    $img: Upload
   ) {
     updateList(
       listID: $listID
@@ -74,7 +75,11 @@ export function PageOne() {
 
   // * GQL mutation to add a list to the logged in user's lists array
   const [addList] = useMutation(ADD_LIST, {
-    variables: { name, description, img },
+    variables: {
+      name,
+      description,
+      img: img?.startsWith("data") ? b64toBlob(img) : null,
+    },
     optimisticResponse: {
       __typename: "Mutation",
       addList: {
@@ -116,7 +121,12 @@ export function PageOne() {
 
   // * GQL mutation to update the name/description/img of the list
   const [updateList] = useMutation(UPDATE_LIST, {
-    variables: { listID, name, description, img },
+    variables: {
+      listID,
+      name,
+      description,
+      img: img?.startsWith("data") ? b64toBlob(img) : null,
+    },
     optimisticResponse: {
       __typename: "Mutation",
       updateList: {

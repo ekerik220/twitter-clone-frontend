@@ -8,7 +8,7 @@ export function RetweetBox(props: PropTypes) {
   return (
     <Container noInteract={props.noInteract}>
       <Header>
-        <Avatar width="20px" height="20px" />
+        <Avatar width="20px" height="20px" url={props.tweet.avatar} />
         <Username>{props.tweet.username}</Username>
         <UserHandle>@{props.tweet.handle}</UserHandle>
       </Header>

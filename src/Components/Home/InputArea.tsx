@@ -5,8 +5,7 @@ import { ImageIcon } from "assets/icons";
 import { Button } from "Components/Button/Button";
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
-import { gql, useMutation } from "@apollo/client";
-import { useSelector } from "react-redux";
+import { gql, useMutation, useQuery } from "@apollo/client";
 import { GET_TWEETS } from "Components/Home/Home";
 import { tweetDetailsFragment } from "utils/fragments";
 
@@ -19,12 +18,20 @@ const ADD_TWEET = gql`
   ${tweetDetailsFragment}
 `;
 
+const USER_INFO = gql`
+  query UserInfo {
+    self {
+      id
+      avatar
+    }
+  }
+`;
+
 export function InputArea() {
   // Local state
   const [input, setInput] = useState<string | null>("");
 
-  // Redux state
-  const avatarURL = useSelector((state: RootState) => state.user.avatar);
+  const { data } = useQuery(USER_INFO);
 
   // refs
   const inputRef = useRef<HTMLSpanElement>(null);
@@ -54,7 +61,7 @@ export function InputArea() {
   return (
     <Container>
       <AvatarBox>
-        <Avatar width="50px" height="50px" url={avatarURL} />
+        <Avatar width="50px" height="50px" url={data?.self.avatar} />
       </AvatarBox>
       <InputBox>
         <Input
