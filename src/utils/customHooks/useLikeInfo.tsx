@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { gql, useMutation } from "@apollo/client";
 import { useSelector } from "react-redux";
+import _ from "lodash";
 
 const ADD_REMOVE_LIKE = gql`
   mutation AddOrRemoveLike($tweet: ID!) {
@@ -19,6 +20,12 @@ export function useLikeInfo(tweet: Tweet) {
   // * GQL mutation to add/remove the user's like from this tweet
   const [addOrRemoveLike, { loading }] = useMutation(ADD_REMOVE_LIKE, {
     variables: { tweet: tweet.id },
+    optimisticResponse: {
+      __typename: "Mutation",
+      addOrRemoveLike: liked
+        ? _.without(tweet.likeIDs, userID)
+        : [...tweet.likeIDs, userID],
+    },
     update: (store, { data }) => {
       store.writeFragment({
         id: `Tweet:${tweet.id}`,
@@ -27,7 +34,7 @@ export function useLikeInfo(tweet: Tweet) {
             likeIDs
           }
         `,
-        data: { likeIDs: data.addOrRemoveLike },
+        data: { likeIDs: data?.addOrRemoveLike },
       });
     },
     refetchQueries: ["GetUser"],
@@ -35,7 +42,7 @@ export function useLikeInfo(tweet: Tweet) {
 
   // * useEffect to monitor whether this tweet is liked by the user or not
   useEffect(() => {
-    if (tweet.likeIDs.includes(userID)) {
+    if (_.includes(tweet.likeIDs, userID)) {
       setLiked(true);
     } else {
       setLiked(false);

@@ -8,7 +8,7 @@ type Tweet = {
   body: string;
   images?: [string];
   replyingTo?: string;
-  likeIDs: [string];
+  likeIDs: string[];
   commentIDs: [string];
   retweetParent?: string;
   retweetIDs: [string];
