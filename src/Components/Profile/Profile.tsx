@@ -21,7 +21,7 @@ export const GET_USER = gql`
       joinDate
       followingIDs
       followedByIDs
-      tweets(getRetweets: true) {
+      tweets {
         ...tweetDetails
       }
       likedTweets {
