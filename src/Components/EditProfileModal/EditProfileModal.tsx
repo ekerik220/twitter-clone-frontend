@@ -177,7 +177,7 @@ export function EditProfileModal() {
               maxLength={160}
               onChange={(e) => dispatch(updatedBio(e.target.value))}
             />
-            <CharCount>{bio.length}/160</CharCount>
+            <CharCount>{bio ? bio.length : 0}/160</CharCount>
           </ContentArea>
         </ContentAreaWrapper>
       </Container>

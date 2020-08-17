@@ -63,7 +63,7 @@ export function User(props: PropTypes) {
   return (
     <Container>
       <div>
-        <Avatar width="50px" height="50px" />
+        <Avatar width="50px" height="50px" url={props.user.avatar} />
       </div>
       <UserContent>
         <UserContentHeader>

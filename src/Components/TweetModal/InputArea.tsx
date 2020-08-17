@@ -5,7 +5,7 @@ import { ImageIcon } from "assets/icons";
 import { Button } from "Components/Button/Button";
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
-import { gql, useMutation } from "@apollo/client";
+import { gql, useMutation, useQuery } from "@apollo/client";
 import { useSelector, useDispatch } from "react-redux";
 import { GET_TWEETS } from "Components/Home/Home";
 import { tweetDetailsFragment } from "utils/fragments";
@@ -20,17 +20,25 @@ const ADD_TWEET = gql`
   ${tweetDetailsFragment}
 `;
 
+const GET_AVATAR = gql`
+  query GetAvatar {
+    self {
+      avatar
+    }
+  }
+`;
+
 export function InputArea() {
   const dispatch = useDispatch();
 
   // Local state
   const [input, setInput] = useState<string | null>("");
 
-  // Redux state
-  const avatarURL = useSelector((state: RootState) => state.user.avatar);
-
   // refs
   const inputRef = useRef<HTMLSpanElement>(null);
+
+  // * GQL mutation to get logged in user's avatar
+  const { data } = useQuery(GET_AVATAR);
 
   // * GQL Mutation to add a tweet to DB
   const [addTweet, { loading }] = useMutation(ADD_TWEET, {
@@ -58,7 +66,7 @@ export function InputArea() {
   return (
     <Container>
       <AvatarBox>
-        <Avatar width="50px" height="50px" url={avatarURL} />
+        <Avatar width="50px" height="50px" url={data?.self.avatar} />
       </AvatarBox>
       <InputBox>
         <Input

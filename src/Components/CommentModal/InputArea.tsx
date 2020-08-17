@@ -6,7 +6,7 @@ import { Button } from "Components/Button/Button";
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
 import { useSelector, useDispatch } from "react-redux";
-import { gql, useMutation } from "@apollo/client";
+import { gql, useMutation, useQuery } from "@apollo/client";
 import { tweetDetailsFragment } from "utils/fragments";
 import { GET_TWEETS } from "Components/Home/Home";
 import { GET_TWEET } from "Components/CommentPage/CommentPage";
@@ -21,6 +21,14 @@ const ADD_COMMENT = gql`
   ${tweetDetailsFragment}
 `;
 
+const GET_AVATAR = gql`
+  query GetAvatar {
+    self {
+      avatar
+    }
+  }
+`;
+
 export function InputArea() {
   const dispatch = useDispatch();
 
@@ -28,11 +36,13 @@ export function InputArea() {
   const [input, setInput] = useState<string | null>("");
 
   // Redux state
-  const avatarURL = useSelector((state: RootState) => state.user.avatar);
   const tweet = useSelector((state: RootState) => state.comment.tweet) as Tweet;
 
   // refs
   const inputRef = useRef<HTMLSpanElement>(null);
+
+  // * GQL query to get logged in user's avatar
+  const { data } = useQuery(GET_AVATAR);
 
   // * GQL mutation to add a comment to the DB
   const [addComment, { loading }] = useMutation(ADD_COMMENT, {
@@ -105,7 +115,7 @@ export function InputArea() {
   return (
     <Container>
       <AvatarBox>
-        <Avatar width="50px" height="50px" url={avatarURL} />
+        <Avatar width="50px" height="50px" url={data?.self.avatar} />
       </AvatarBox>
       <InputBox>
         <Input
