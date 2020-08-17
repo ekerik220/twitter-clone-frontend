@@ -9,10 +9,11 @@ import {
   BookmarksIcon,
 } from "assets/icons";
 import { RetweetDropdown } from "./RetweetDropdown";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useLikeInfo } from "utils/customHooks/useLikeInfo";
 import { clickedCommentButton } from "redux/slices/commentSlice";
 import { gql, useQuery, useMutation } from "@apollo/client";
+import _ from "lodash";
 
 export const SELF = gql`
   query Self {
@@ -41,6 +42,9 @@ function ButtonsArea(props: PropTypes) {
   // local state
   const [retweetDropdown, setRetweetDropdown] = useState(false);
 
+  // redux state
+  const userID = useSelector((state: RootState) => state.user.userID);
+
   // hook that gives us methods / state relating to the 'liked' state of the tweet
   const { handleLikeClick, liked, likeCount } = useLikeInfo(props.tweet);
 
@@ -52,14 +56,14 @@ function ButtonsArea(props: PropTypes) {
     variables: { tweetID: props.tweet.id },
     update: (store, { data }) => {
       store.writeFragment({
-        id: `User:${data.addOrRemoveBookmark.id}`,
+        id: `User:${data?.addOrRemoveBookmark.id}`,
         fragment: gql`
           fragment BookmarkIDs on User {
             bookmarkIDs
           }
         `,
         data: {
-          bookmarkIDs: data.addOrRemoveBookmark.bookmarkIDs,
+          bookmarkIDs: data?.addOrRemoveBookmark.bookmarkIDs,
         },
       });
     },

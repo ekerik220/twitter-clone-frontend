@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { RetweetIcon, PencilIcon } from "assets/icons";
 import { gql, useMutation, useQuery } from "@apollo/client";
 import { tweetDetailsFragment } from "utils/fragments";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { clickedRetweetCommentButton } from "redux/slices/retweetSlice";
 import { GET_TWEETS } from "Components/Home/Home";
 import { GET_TWEET } from "Components/CommentPage/CommentPage";
@@ -39,6 +39,9 @@ type PropTypes = { tweet: Tweet };
 export function RetweetDropdown(props: PropTypes) {
   const dispatch = useDispatch();
 
+  // redux state
+  const userID = useSelector((state: RootState) => state.user.userID);
+
   // * GQL query to get logged in user's retweetIDs list
   const { data } = useQuery(SELF);
 
@@ -47,31 +50,48 @@ export function RetweetDropdown(props: PropTypes) {
     variables: {
       parentID: props.tweet.body ? props.tweet.id : props.tweet.retweetParent,
     },
+    optimisticResponse: {
+      __typename: "Mutation",
+      addRetweet: {
+        id: userID,
+        username: "temp",
+        handle: "temp",
+        avatar: "temp",
+        date: new Date(),
+        body: props.tweet.body,
+        likeIDs: [],
+        commentIDs: [],
+        retweetIDs: [],
+        retweetParent: props.tweet.body
+          ? props.tweet.id
+          : props.tweet.retweetParent,
+      },
+    },
     update: (store, { data }) => {
       // Update tweets returned from self { tweets } queries
       try {
-        type GetTweetsQuery = {
-          self: { retweetParentIDs: string[]; tweets: Tweet[] };
-        };
-        const query = store.readQuery<GetTweetsQuery>({
-          query: GET_TWEETS,
-          variables: { getRetweets: true },
-        });
-        const tweetList = query?.self.tweets;
-        const retweetParentIDs = query?.self.retweetParentIDs;
+        const fragment = gql`
+          fragment MyTweets on User {
+            retweetParentIDs
+          }
+        `;
 
-        if (tweetList && retweetParentIDs) {
-          store.writeQuery({
-            query: GET_TWEETS,
+        const read: any = store.readFragment({
+          id: `User:${userID}`,
+          fragment,
+        });
+
+        const retweetParentIDs = read?.retweetParentIDs;
+
+        if (retweetParentIDs) {
+          store.writeFragment({
+            id: `User:${userID}`,
+            fragment,
             data: {
-              self: {
-                __typename: "User",
-                retweetParentIDs: [
-                  data.addRetweet.retweetParent,
-                  ...retweetParentIDs,
-                ],
-                tweets: [data.addRetweet, ...tweetList],
-              },
+              retweetParentIDs: [
+                data?.addRetweet.retweetParent,
+                ...retweetParentIDs,
+              ],
             },
           });
         }
@@ -81,27 +101,16 @@ export function RetweetDropdown(props: PropTypes) {
 
       // Update the retweetIDs list for parent tweet
       store.writeFragment({
-        id: props.tweet.id,
+        id: `Tweet:${props.tweet.id}`,
         fragment: gql`
           fragment ParentTweet on Tweet {
             retweetIDs
           }
         `,
-        data: { retweetIDs: [data.addRetweet.id, ...props.tweet.retweetIDs] },
-      });
-
-      // Update queries for this tweet with the new retweetID list
-      store.writeQuery({
-        query: GET_TWEET,
-        variables: { id: props.tweet.id },
-        data: {
-          tweet: {
-            ...props.tweet,
-            retweetIDs: [data.addRetweet.id, ...props.tweet.retweetIDs],
-          },
-        },
+        data: { retweetIDs: [data?.addRetweet.id, ...props.tweet.retweetIDs] },
       });
     },
+    refetchQueries: ["GetTweets"],
   });
 
   // * GQL Mutation to undo a retweet
