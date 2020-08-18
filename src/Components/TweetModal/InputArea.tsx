@@ -1,7 +1,7 @@
 import React, { useState, useRef } from "react";
 import styled from "styled-components";
 import { Avatar } from "Components/Avatar/Avatar";
-import { ImageIcon } from "assets/icons";
+import { ImageIcon, CrossIcon } from "assets/icons";
 import { Button } from "Components/Button/Button";
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
@@ -12,8 +12,8 @@ import { tweetDetailsFragment } from "utils/fragments";
 import { closedTweetModal } from "redux/slices/tweetModalSlice";
 
 const ADD_TWEET = gql`
-  mutation AddTweet($body: String!) {
-    addTweet(body: $body) {
+  mutation AddTweet($body: String!, $img: Upload) {
+    addTweet(body: $body, img: $img) {
       ...tweetDetails
     }
   }
@@ -33,6 +33,8 @@ export function InputArea() {
 
   // Local state
   const [input, setInput] = useState<string | null>("");
+  const [imgFile, setImgFile] = useState<File>();
+  const [imgData, setImgData] = useState<string>();
 
   // refs
   const inputRef = useRef<HTMLSpanElement>(null);
@@ -44,6 +46,8 @@ export function InputArea() {
   const [addTweet, { loading }] = useMutation(ADD_TWEET, {
     onCompleted: (data) => {
       setInput("");
+      setImgFile(undefined);
+      setImgData(undefined);
       if (inputRef.current) inputRef.current.innerHTML = "";
       dispatch(closedTweetModal());
     },
@@ -63,6 +67,27 @@ export function InputArea() {
     },
   });
 
+  // * Handle file input for the image button
+  const handleFileInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target?.files) {
+      // Save the plain file in state
+      setImgFile(e.target.files[0]);
+
+      // Get a data string version of the file so we can display the image right now
+      const reader = new FileReader();
+      reader.readAsDataURL(e.target.files[0]);
+      reader.onload = () => {
+        setImgData(reader.result as string);
+      };
+    }
+  };
+
+  // * Remove image from the tweet
+  const removeImage = () => {
+    setImgData(undefined);
+    setImgFile(undefined);
+  };
+
   return (
     <Container>
       <AvatarBox>
@@ -75,10 +100,19 @@ export function InputArea() {
           ref={inputRef}
           contentEditable={!loading}
         ></Input>
+        {imgData && (
+          <ImageBox>
+            <BlackCircle onClick={removeImage}>
+              <StyledCrossIcon />
+            </BlackCircle>
+            <Image src={imgData} alt="" />
+          </ImageBox>
+        )}
         <Dashboard>
           <DashboardLeft>
             <ImageIconHover>
               <ImageIcon />
+              <HiddenFileInput onChange={handleFileInput} />
             </ImageIconHover>
           </DashboardLeft>
           <DashboardRight>
@@ -107,7 +141,9 @@ export function InputArea() {
             )}
             <TweetButton
               disabled={!input || input.length > 280 || loading}
-              onClick={() => addTweet({ variables: { body: input } })}
+              onClick={() =>
+                addTweet({ variables: { body: input, img: imgFile } })
+              }
             >
               Twat
             </TweetButton>
@@ -179,6 +215,8 @@ const ImageIconHover = styled.div`
   border-radius: 50%;
   color: ${({ theme }) => theme.colors.blueMain};
   cursor: pointer;
+  overflow: hidden;
+  position: relative;
 
   &:hover {
     background-color: ${({ theme }) => theme.colors.blueHover};
@@ -193,5 +231,45 @@ const TweetButton = styled(Button)`
 
 const CircularProgress = styled(CircularProgressbar)`
   margin-right: 15px;
+  width: 30px;
+`;
+
+const ImageBox = styled.div`
+  cursor: pointer;
+  position: relative;
+  max-width: max-content;
+  margin: 0 auto;
+`;
+
+const Image = styled.img`
+  max-width: 500px;
+  max-height: 300px;
+  border-radius: 15px;
+`;
+
+const BlackCircle = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  top: 7px;
+  left: 7px;
+  height: 28px;
+  width: 28px;
+  border-radius: 50%;
+  background: black;
+`;
+
+const StyledCrossIcon = styled(CrossIcon)`
+  color: white;
+  height: 19px;
+  width: 19px;
+`;
+
+const HiddenFileInput = styled.input.attrs({ type: "file", title: " " })`
+  position: absolute;
+  height: 50px;
+  opacity: 0;
+  cursor: pointer;
   width: 30px;
 `;

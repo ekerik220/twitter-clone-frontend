@@ -14,5 +14,6 @@ export const tweetDetailsFragment = gql`
     replyingTo
     retweetParent
     retweetIDs
+    images
   }
 `;

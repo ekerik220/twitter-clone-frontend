@@ -65,6 +65,11 @@ export function TopTweet(props: PropTypes) {
         </DownArrowHover>
       </UserArea>
       <Body>{props.tweet.body}</Body>
+      {props.tweet.images && props.tweet.images.length > 0 && (
+        <ImageBox>
+          <Image src={props.tweet.images[0]} alt="" />
+        </ImageBox>
+      )}
       <Date>{formatDate(props.tweet.date)}</Date>
       <RetweetsLikes>
         <Count>
@@ -261,4 +266,17 @@ const ActionsIconSVG = styled(ActionsIcon)`
 const BoldRetweetIconSVG = styled(BoldRetweetIcon)`
   height: 23px;
   width: 23px;
+`;
+
+const ImageBox = styled.div`
+  display: flex;
+  width: 100%;
+  justify-content: center;
+`;
+
+const Image = styled.img`
+  max-width: 500px;
+  max-height: 300px;
+  border-radius: 15px;
+  margin-top: 10px;
 `;

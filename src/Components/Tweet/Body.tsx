@@ -17,6 +17,9 @@ export function Body(props: PropTypes) {
   return (
     <Container>
       <TweetBody>{props.tweet.body}</TweetBody>
+      {props.tweet.images && props.tweet.images.length > 0 && (
+        <Image src={props.tweet.images[0]} alt="" />
+      )}
       <ParentBody onClick={handleClick}>
         {props.tweet.body && props.parentTweet ? (
           <RetweetBox tweet={props.parentTweet} />
@@ -24,7 +27,6 @@ export function Body(props: PropTypes) {
           props.parentTweet?.body
         )}
       </ParentBody>
-      <ImageArea></ImageArea>
     </Container>
   );
 }
@@ -37,4 +39,9 @@ const TweetBody = styled.div`
 
 const ParentBody = styled.div``;
 
-const ImageArea = styled.div``;
+const Image = styled.img`
+  max-width: 500px;
+  max-height: 300px;
+  border-radius: 15px;
+  margin-top: 10px;
+`;
