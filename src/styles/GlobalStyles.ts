@@ -12,6 +12,11 @@ html, body {
     overflow-y: auto;
 }
 
+#root {
+    min-height: 100%;
+    display: flex;
+}
+
 body {
     font-family: ${({ theme }) => theme.fontFamily}
 }

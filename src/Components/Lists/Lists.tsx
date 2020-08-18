@@ -51,9 +51,7 @@ export function Lists() {
 const Container = styled.div`
   max-width: 600px;
   width: 100%;
-
-  height: 100%;
-
+  min-height: 100%;
   border-left: 1px solid;
   border-right: 1px solid;
   border-color: ${({ theme }) => theme.colors.lightGrey};

@@ -46,6 +46,7 @@ const Container = styled.div`
   background-color: ${({ theme }) => theme.colors.greyBackground};
   overflow: hidden;
   margin-top: 50px;
+  flex-shrink: 0;
 
   @media only screen and (min-width: 1090px) {
     width: 350px;
