@@ -17,6 +17,7 @@ import { CreateListModal } from "Components/CreateListModal/CreateListModal";
 import { ListPage } from "Components/ListPage/ListPage";
 import { Profile } from "Components/Profile/Profile";
 import { EditProfileModal } from "Components/EditProfileModal/EditProfileModal";
+import { Messages } from "Components/Messages/Messages";
 
 export function Main() {
   const history = useHistory();
@@ -67,6 +68,9 @@ export function Main() {
         </Route>
         <Route path="/list/:listID" component={ListPage} />
         <Route path="/profile/:handle" component={Profile} />
+        <Route path="/messages">
+          <Messages />
+        </Route>
       </Switch>
       <DiscoverArea />
 

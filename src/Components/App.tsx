@@ -34,6 +34,7 @@ function App() {
             "/lists",
             "/list",
             "/profile",
+            "/messages",
           ]}
         >
           <Main />
