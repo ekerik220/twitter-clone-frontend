@@ -6,17 +6,19 @@ import { TwitterBird } from "assets/icons";
 import { User } from "./User";
 import { useDispatch } from "react-redux";
 import { clickedTweetButton } from "redux/slices/tweetModalSlice";
+import { useHistory } from "react-router-dom";
 
 /**
  * Side nav bar top level component
  */
 export function NavBar() {
   const dispatch = useDispatch();
+  const history = useHistory();
 
   return (
     <Container>
       <Nav>
-        <TwitterBirdHoverWrap>
+        <TwitterBirdHoverWrap onClick={() => history.push("/home")}>
           <TwitterBirdSVG />
         </TwitterBirdHoverWrap>
         <NavList />
