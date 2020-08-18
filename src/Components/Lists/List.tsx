@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { Avatar } from "Components/Avatar/Avatar";
 import { gql, useQuery } from "@apollo/client";
 import { useHistory } from "react-router-dom";
+import { SquareAvatar } from "./SquareAvatar";
 
 const GET_SELF = gql`
   query GetSelf {
@@ -37,7 +38,7 @@ export function List(props: PropTypes) {
 
   return (
     <Container onClick={handleClick}>
-      <Avatar width="50px" height="50px" url={props.list.img} />
+      <SquareAvatar width="50px" height="50px" url={props.list.img} />
       <Info>
         <Title>{props.list.name}</Title>
         <User>
