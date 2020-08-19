@@ -5,6 +5,17 @@ import {
   clickedMembersButton,
   clickedSuggestedButton,
 } from "redux/slices/listModalSlice";
+import { gql, useQuery } from "@apollo/client";
+
+const GET_LIST = gql`
+  query GetList($listID: ID!) {
+    getList(id: $listID) {
+      users {
+        id
+      }
+    }
+  }
+`;
 
 export function CategorySelector() {
   const dispatch = useDispatch();
@@ -14,6 +25,11 @@ export function CategorySelector() {
     (state: RootState) => state.listModal.pageTwoCategory
   );
   const editMode = useSelector((state: RootState) => state.listModal.editMode);
+  const listID = useSelector((state: RootState) => state.listModal.listID);
+
+  // * GQL query to get the list (specifcally the user's in the list) so that
+  // * we can use it to display the number of user's
+  const { data } = useQuery(GET_LIST, { variables: { listID } });
 
   // * If we are in edit mode, immediately start us on the members tab
   useLayoutEffect(() => {
@@ -26,7 +42,7 @@ export function CategorySelector() {
         selected={currentCategory === "members"}
         onClick={() => dispatch(clickedMembersButton())}
       >
-        Members (0)
+        Members ({data ? data.getList.users.length : 0})
       </Category>
       <Category
         selected={currentCategory === "suggested"}
