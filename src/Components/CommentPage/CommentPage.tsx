@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import { Tweet } from "Components/Tweet/Tweet";
 import { TopTweet } from "./TopTweet";
@@ -30,6 +30,12 @@ export function CommentPage() {
   const { data, loading } = useQuery(GET_TWEET, {
     variables: { id: history.location.state.id },
   });
+
+  // Scroll to the top when we load in
+  useEffect(() => {
+    const body = document.querySelector("body");
+    if (body) body.scrollTo(0, 0);
+  }, []);
 
   return (
     <Container>
