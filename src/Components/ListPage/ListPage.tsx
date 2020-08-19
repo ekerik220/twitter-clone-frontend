@@ -9,6 +9,7 @@ import { tweetDetailsFragment } from "utils/fragments";
 import { Tweet } from "Components/Tweet/Tweet";
 import { useDispatch } from "react-redux";
 import { openedEditListModal } from "redux/slices/listModalSlice";
+import { LoadingIcon } from "assets/icons";
 
 const GET_LIST = gql`
   query GetList($id: ID!) {
@@ -49,7 +50,7 @@ export function ListPage() {
   const snapshot = history.location.state;
 
   // * Grab the data for this list
-  const { data } = useQuery(GET_LIST, { variables: { id: listID } });
+  const { data, loading } = useQuery(GET_LIST, { variables: { id: listID } });
 
   // * Sort the tweets by date and filter out any reply type tweets
   useEffect(() => {
@@ -79,6 +80,14 @@ export function ListPage() {
   const handleEditListButton = () => {
     if (data) dispatch(openedEditListModal(data.getList));
   };
+
+  if (loading) {
+    return (
+      <LoadingArea>
+        <LoadingIcon />
+      </LoadingArea>
+    );
+  }
 
   return (
     <Container>
@@ -241,4 +250,10 @@ const StyledButton = styled(Button)`
   width: 90px;
   height: 39px;
   margin: 20px 0;
+`;
+
+const LoadingArea = styled(Container)`
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
