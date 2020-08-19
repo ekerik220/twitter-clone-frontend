@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { InputArea } from "./InputArea";
 import { Tweet } from "Components/Tweet/Tweet";
@@ -21,15 +21,35 @@ export const GET_TWEETS = gql`
 `;
 
 export function Home() {
+  // local state
+  const [tweets, setTweets] = useState<Tweet[]>();
+
   // * GQL query to get logged in user's tweet list
   const { data, loading } = useQuery(GET_TWEETS);
+
+  // * Filter tweets
+  useEffect(() => {
+    if (data) {
+      const filteredTweets = data.self.tweets.filter((tweet: Tweet) => {
+        // filter out retweets made by me, with no added content
+        if (tweet.retweetParent && !tweet.body && tweet.userID === data.self.id)
+          return false;
+        // filter out tweets that are repyling to someone
+        if (tweet.replyingTo) return false;
+        // keep anything else
+        return true;
+      });
+
+      setTweets(filteredTweets);
+    }
+  }, [data]);
 
   return (
     <Container>
       <Header>Home</Header>
       <TweetArea>
         <InputArea />
-        {data?.self.tweets.map((tweet: Tweet) => (
+        {tweets?.map((tweet: Tweet) => (
           <Tweet key={tweet.id} tweet={tweet} />
         ))}
       </TweetArea>
