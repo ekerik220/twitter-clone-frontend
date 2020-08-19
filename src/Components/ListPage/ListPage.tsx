@@ -51,7 +51,7 @@ export function ListPage() {
   // * Grab the data for this list
   const { data } = useQuery(GET_LIST, { variables: { id: listID } });
 
-  // * Sort the tweets by date
+  // * Sort the tweets by date and filter out any reply type tweets
   useEffect(() => {
     let tweetAccum: Tweet[] = [];
     data?.getList.users.forEach((user: any) => {
@@ -60,6 +60,18 @@ export function ListPage() {
     tweetAccum.sort(
       (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
     );
+
+    // create an array of all the user's IDs
+    const userIDs = data?.getList.users.map((user: any) => user.id);
+
+    // filter out reply type tweets and tweets that aren't made
+    // by a user in the list
+    tweetAccum = tweetAccum.filter((tweet) => {
+      if (tweet.replyingTo) return false;
+      if (!userIDs.includes(tweet.userID)) return false;
+      return true;
+    });
+
     setTweets(tweetAccum);
   }, [data]);
 
