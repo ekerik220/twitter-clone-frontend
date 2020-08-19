@@ -8,6 +8,7 @@ import { ProfileCard } from "./ProfileCard";
 import { CategorySelector } from "./CategorySelector";
 import { useSelector } from "react-redux";
 import { Tweet } from "Components/Tweet/Tweet";
+import { LoadingIcon } from "assets/icons";
 
 export const GET_USER = gql`
   query GetUser($handle: String!) {
@@ -44,12 +45,8 @@ export function Profile() {
     (state: RootState) => state.profile.currentCategory
   );
 
-  // snapshot of what the profile should look like when we first enter the page
-  const snapshot = history.location.state;
-
-  // * Gets the profile data from the server so we can stay up to date with any
-  // * changes made
-  const { data } = useQuery(GET_USER, { variables: { handle } });
+  // * Gets the profile data from the server
+  const { data, loading } = useQuery(GET_USER, { variables: { handle } });
 
   // * Change which tweets are visible depending on the current category
   useEffect(() => {
@@ -73,11 +70,19 @@ export function Profile() {
     setTweets(visibleTweets);
   }, [data, currentCategory]);
 
+  if (loading) {
+    return (
+      <LoadingArea>
+        <LoadingIcon />
+      </LoadingArea>
+    );
+  }
+
   return (
     <Container>
       <Header>
         <StyledBackButton onClick={() => history.goBack()} />
-        {data?.getUserByHandle.username || snapshot?.username}
+        {data?.getUserByHandle.username}
       </Header>
       <ProfileCard />
       <CategorySelector />
@@ -130,4 +135,10 @@ const TweetArea = styled.div`
   display: flex;
   flex-direction: column;
   background-color: ${({ theme }) => theme.colors.lightGrey};
+`;
+
+const LoadingArea = styled(Container)`
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;

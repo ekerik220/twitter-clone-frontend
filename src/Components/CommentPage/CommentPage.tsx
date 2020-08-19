@@ -6,6 +6,7 @@ import { BackButton } from "Components/BackButton/BackButton";
 import { useHistory } from "react-router-dom";
 import { gql, useQuery } from "@apollo/client";
 import { tweetDetailsFragment } from "utils/fragments";
+import { LoadingIcon } from "assets/icons";
 
 export const GET_TWEET = gql`
   query GetTweet($id: ID!) {
@@ -26,7 +27,7 @@ export function CommentPage() {
   // The tweet in history is just a copy of the state it was in when we clicked on it
   // so we should use it's ID to get a version of it that will be sensitive to changes
   // ASAP by querying for it
-  const { data } = useQuery(GET_TWEET, {
+  const { data, loading } = useQuery(GET_TWEET, {
     variables: { id: history.location.state.id },
   });
 
@@ -42,6 +43,11 @@ export function CommentPage() {
           <Tweet key={tweet.id} tweet={tweet} />
         ))}
       </TweetArea>
+      {loading && (
+        <LoadingArea>
+          <LoadingIcon />
+        </LoadingArea>
+      )}
     </Container>
   );
 }
@@ -85,4 +91,11 @@ const TweetArea = styled.div`
 
 const StyledBackButton = styled(BackButton)`
   margin-right: 20px;
+`;
+
+const LoadingArea = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 25px;
 `;

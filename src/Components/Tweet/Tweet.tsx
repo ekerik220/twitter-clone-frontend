@@ -8,6 +8,7 @@ import { AvatarBox } from "./AvatarBox";
 import { Retweeted } from "./Retweeted";
 import { gql, useLazyQuery } from "@apollo/client";
 import { tweetDetailsFragment } from "utils/fragments";
+import { LoadingIcon } from "assets/icons";
 
 const GET_TWEET = gql`
   query GetTweet($id: ID!) {
@@ -43,7 +44,11 @@ export function Tweet(props: PropTypes) {
 
   // * Don't show the tweet until we've loaded it's parent's info
   if (loading) {
-    return <Container>Loading...</Container>;
+    return (
+      <LoadingArea>
+        <LoadingIcon />
+      </LoadingArea>
+    );
   }
 
   return (
@@ -111,4 +116,10 @@ const ReplyingTo = styled.span`
 
 const BlueText = styled.span`
   color: ${({ theme }) => theme.colors.blueMain};
+`;
+
+const LoadingArea = styled(Container)`
+  justify-content: center;
+  align-items: center;
+  margin-top: 15px;
 `;

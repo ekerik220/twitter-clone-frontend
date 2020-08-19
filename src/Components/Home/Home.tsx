@@ -4,6 +4,7 @@ import { InputArea } from "./InputArea";
 import { Tweet } from "Components/Tweet/Tweet";
 import { gql, useQuery } from "@apollo/client";
 import { tweetDetailsFragment } from "utils/fragments";
+import { LoadingIcon } from "assets/icons";
 
 // query for logged in user's tweet list
 export const GET_TWEETS = gql`
@@ -21,7 +22,7 @@ export const GET_TWEETS = gql`
 
 export function Home() {
   // * GQL query to get logged in user's tweet list
-  const { data } = useQuery(GET_TWEETS);
+  const { data, loading } = useQuery(GET_TWEETS);
 
   return (
     <Container>
@@ -32,6 +33,11 @@ export function Home() {
           <Tweet key={tweet.id} tweet={tweet} />
         ))}
       </TweetArea>
+      {loading && (
+        <LoadingArea>
+          <LoadingIcon />
+        </LoadingArea>
+      )}
     </Container>
   );
 }
@@ -71,4 +77,11 @@ const TweetArea = styled.div`
   flex-direction: column;
   margin-top: 50px;
   background-color: ${({ theme }) => theme.colors.lightGrey};
+`;
+
+const LoadingArea = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 25px;
 `;

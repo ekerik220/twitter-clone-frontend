@@ -12,20 +12,13 @@ import {
   MoreIcon,
 } from "assets/icons";
 import { gql, useQuery } from "@apollo/client";
-import { tweetDetailsFragment } from "utils/fragments";
 
 const GET_HANDLE = gql`
   query {
     self {
-      id
-      username
       handle
-      tweets {
-        ...tweetDetails
-      }
     }
   }
-  ${tweetDetailsFragment}
 `;
 
 /**
@@ -78,7 +71,7 @@ export function NavList() {
         </NavItemHoverWrap>
       </NavItem>
       <NavItem
-        to={{ pathname: `/profile/${data?.self.handle}`, state: data?.self }}
+        to={`/profile/${data?.self.handle}`}
         selected={path.startsWith("/profile")}
       >
         <NavItemHoverWrap>

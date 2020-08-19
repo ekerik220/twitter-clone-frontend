@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { AddListIcon } from "assets/icons";
+import { AddListIcon, LoadingIcon } from "assets/icons";
 import { List } from "./List";
 import { useDispatch } from "react-redux";
 import { openedListModal } from "redux/slices/listModalSlice";
@@ -39,7 +39,11 @@ export function Lists() {
         </IconHover>
       </Header>
       <ListsArea>
-        {loading && "Loading..."}
+        {loading && (
+          <LoadingArea>
+            <LoadingIcon />
+          </LoadingArea>
+        )}
         {data?.self.lists.map((list: List, index: number) => (
           <List key={index} list={list} />
         ))}
@@ -99,5 +103,11 @@ const ListsArea = styled.div`
   display: flex;
   flex-direction: column;
   margin-top: 50px;
-  background-color: ${({ theme }) => theme.colors.lightGrey};
+`;
+
+const LoadingArea = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 25px;
 `;

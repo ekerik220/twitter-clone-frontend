@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { gql, useQuery } from "@apollo/client";
 import { Tweet } from "Components/Tweet/Tweet";
 import { tweetDetailsFragment } from "utils/fragments";
+import { LoadingIcon } from "assets/icons";
 
 const BOOKMARKS = gql`
   query Bookmarks {
@@ -17,12 +18,17 @@ const BOOKMARKS = gql`
 `;
 
 export function Bookmarks() {
-  const { data } = useQuery(BOOKMARKS);
+  const { data, loading } = useQuery(BOOKMARKS);
 
   return (
     <Container>
       <Header>Bookmarks</Header>
       <BookmarkedTweets>
+        {loading && (
+          <LoadingArea>
+            <LoadingIcon />
+          </LoadingArea>
+        )}
         {data?.self.bookmarks.map((tweet: Tweet) => (
           <Tweet tweet={tweet} />
         ))}
@@ -64,5 +70,11 @@ const BookmarkedTweets = styled.div`
   display: flex;
   flex-direction: column;
   margin-top: 50px;
-  background-color: ${({ theme }) => theme.colors.lightGrey};
+`;
+
+const LoadingArea = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 25px;
 `;

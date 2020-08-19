@@ -5,6 +5,7 @@ import { tweetDetailsFragment } from "utils/fragments";
 import { useSelector } from "react-redux";
 import { Tweet } from "Components/Tweet/Tweet";
 import _ from "lodash";
+import { LoadingIcon } from "assets/icons";
 
 const SEARCH = gql`
   query Search($term: String!) {
@@ -36,7 +37,11 @@ export function SearchArea() {
 
   return (
     <Container>
-      {loading && "Loading"}
+      {loading && (
+        <LoadingArea>
+          <LoadingIcon />
+        </LoadingArea>
+      )}
       {data &&
         data.search.map((tweet: Tweet) => (
           <Tweet key={tweet.id} tweet={tweet} />
@@ -47,4 +52,11 @@ export function SearchArea() {
 
 const Container = styled.div`
   margin-top: 100px;
+`;
+
+const LoadingArea = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100px;
 `;

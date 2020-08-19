@@ -7,6 +7,7 @@ import { CategorySelector } from "./CategorySelector";
 import { useSelector, useDispatch } from "react-redux";
 import { Tweet } from "Components/Tweet/Tweet";
 import { leavingNotificationScreen } from "redux/slices/notificationsSlice";
+import { LoadingIcon } from "assets/icons";
 
 const GET_NOTIFICATIONS = gql`
   query GetNotifications {
@@ -34,7 +35,7 @@ const GET_NOTIFICATIONS = gql`
 export function Notifications() {
   const dispatch = useDispatch();
 
-  const { data } = useQuery(GET_NOTIFICATIONS);
+  const { data, loading } = useQuery(GET_NOTIFICATIONS);
 
   // redux data
   const currentCategory = useSelector(
@@ -55,6 +56,11 @@ export function Notifications() {
         <CategorySelector />
       </Header>
       <NotificationArea>
+        {loading && (
+          <LoadingArea>
+            <LoadingIcon />
+          </LoadingArea>
+        )}
         {currentCategory === "notifications" &&
           data?.self.notifications.map(
             (notification: NotificationObject, index: number) => (
@@ -107,5 +113,11 @@ const NotificationArea = styled.div`
   display: flex;
   flex-direction: column;
   margin-top: 100px;
-  background-color: ${({ theme }) => theme.colors.lightGrey};
+`;
+
+const LoadingArea = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 25px;
 `;
