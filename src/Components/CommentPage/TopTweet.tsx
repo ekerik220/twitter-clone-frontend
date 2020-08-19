@@ -9,18 +9,29 @@ import {
   ActionsIcon,
   LikeIconFilled,
   BoldRetweetIcon,
+  BookmarksIcon,
 } from "assets/icons";
 import { useLikeInfo } from "utils/customHooks/useLikeInfo";
 import moment from "moment";
 import { useDispatch } from "react-redux";
 import { clickedCommentButton } from "redux/slices/commentSlice";
 import { RetweetDropdown } from "Components/Tweet/RetweetDropdown";
-import { gql, useQuery } from "@apollo/client";
+import { gql, useQuery, useMutation } from "@apollo/client";
 
 export const SELF = gql`
   query Self {
     self {
       retweetParentIDs
+      bookmarkIDs
+    }
+  }
+`;
+
+const ADD_REMOVE_BOOKMARK = gql`
+  mutation addOrRemoveBookmark($tweetID: ID!) {
+    addOrRemoveBookmark(tweetID: $tweetID) {
+      id
+      bookmarkIDs
     }
   }
 `;
@@ -40,9 +51,33 @@ export function TopTweet(props: PropTypes) {
   // * GQL query to get logged in user's retweetIDs list
   const { data } = useQuery(SELF);
 
+  // * GQL mutation to add tweet to user's bookmarkIDs list
+  const [addOrRemoveBookmark] = useMutation(ADD_REMOVE_BOOKMARK, {
+    variables: { tweetID: props.tweet.id },
+    update: (store, { data }) => {
+      store.writeFragment({
+        id: `User:${data?.addOrRemoveBookmark.id}`,
+        fragment: gql`
+          fragment BookmarkIDs on User {
+            bookmarkIDs
+          }
+        `,
+        data: {
+          bookmarkIDs: data?.addOrRemoveBookmark.bookmarkIDs,
+        },
+      });
+    },
+    refetchQueries: ["Bookmarks"],
+  });
+
   const handleRetweetClick = (e: React.MouseEvent<HTMLDivElement>) => {
     e.stopPropagation();
     setRetweetDropdown(!retweetDropdown);
+  };
+
+  const handleBookmarkClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    e.stopPropagation();
+    addOrRemoveBookmark();
   };
 
   const formatDate = (date: Date) => {
@@ -94,8 +129,10 @@ export function TopTweet(props: PropTypes) {
         <IconHover color="pink" onClick={handleLikeClick}>
           {liked ? <LikeIconFilledSVG /> : <LikeIconSVG />}
         </IconHover>
-        <IconHover>
-          <ActionsIconSVG />
+        <IconHover onClick={handleBookmarkClick}>
+          <StyledBookmarkIcon
+            filled={data && data.self.bookmarkIDs.includes(props.tweet.id)}
+          />
         </IconHover>
       </ButtonsArea>
     </Container>
@@ -279,4 +316,10 @@ const Image = styled.img`
   max-height: 300px;
   border-radius: 15px;
   margin-top: 10px;
+`;
+
+const StyledBookmarkIcon = styled(BookmarksIcon)`
+  width: 23px;
+  height: 23px;
+  color: ${({ theme, filled }) => (filled ? theme.colors.blueMain : "inherit")};
 `;
