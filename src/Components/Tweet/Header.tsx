@@ -1,17 +1,27 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { DownArrow } from "assets/icons";
+import { TweetDropdown } from "./TweetDropdown";
 
 type PropTypes = { tweet: Tweet };
 
 export function Header(props: PropTypes) {
+  // local state
+  const [dropdown, setDropdown] = useState(false);
+
+  const handleDownArrowClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    e.stopPropagation();
+    setDropdown(!dropdown);
+  };
+
   return (
     <Container>
       <User>
         <Username>{props.tweet.username}</Username>
         <UserHandle>@{props.tweet.handle}</UserHandle>
       </User>
-      <DownArrowHover>
+      <DownArrowHover onClick={handleDownArrowClick}>
+        {dropdown && <TweetDropdown tweet={props.tweet} />}
         <DownArrowIcon />
       </DownArrowHover>
     </Container>
@@ -51,6 +61,7 @@ const DownArrowHover = styled.div`
   width: 27px;
   border-radius: 50%;
   transition: background-color 0.2s;
+  position: relative;
 
   &:hover {
     background-color: ${({ theme }) => theme.colors.blueHover};

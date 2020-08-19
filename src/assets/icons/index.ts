@@ -28,3 +28,6 @@ export { EllipsisIcon } from "./EllipsisIcon";
 export { AddListIcon } from "./AddListIcon";
 export { CalendarIcon } from "./CalendarIcon";
 export { ListAvatarIcon } from "./ListAvatarIcon";
+export { FollowIcon } from "./FollowIcon";
+export { UnfollowIcon } from "./UnfollowIcon";
+export { TrashcanIcon } from "./TrashcanIcon";

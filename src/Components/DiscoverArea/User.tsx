@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { Avatar } from "Components/Avatar/Avatar";
 import { Button } from "Components/Button/Button";
 import { gql, useMutation } from "@apollo/client";
+import { useSelector } from "react-redux";
 
 const FOLLOW_OR_UNFOLLOW = gql`
   mutation FollowOrUnfollow($id: ID!) {
@@ -20,8 +21,24 @@ type PropTypes = {
 };
 
 export function User(props: PropTypes) {
+  // redux state
+  const userID = useSelector((state: RootState) => state.user.userID);
+
   const [followOrUnfollow, { data }] = useMutation(FOLLOW_OR_UNFOLLOW, {
     variables: { id: props.userID },
+    update: (store, { data }) => {
+      const fragment = gql`
+        fragment MyFollowingIDs on User {
+          followingIDs
+        }
+      `;
+
+      store.writeFragment({
+        id: `User:${userID}`,
+        fragment,
+        data: { followingIDs: data.followOrUnfollow.followingIDs },
+      });
+    },
   });
 
   return (
