@@ -4,6 +4,7 @@ import { Avatar } from "Components/Avatar/Avatar";
 import { useDispatch, useSelector } from "react-redux";
 import { tooltipWasClosed } from "redux/slices/globalUISlice";
 import { useQuery, gql } from "@apollo/client";
+import { userLoggedOut } from "redux/slices/userSlice";
 
 const USER_INFO = gql`
   query UserInfo {
@@ -53,7 +54,9 @@ export function Tooltip(props: Props) {
               </UsernameBox>
             </Info>
           </TopBox>
-          <Link>Log out @{data?.self.handle}</Link>
+          <Link onClick={() => dispatch(userLoggedOut())}>
+            Log out @{data?.self.handle}
+          </Link>
           <BottomArrow></BottomArrow>
         </Container>
         {props.children}

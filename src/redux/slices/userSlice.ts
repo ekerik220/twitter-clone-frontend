@@ -16,9 +16,7 @@ const slice = createSlice({
       state.token = action.payload;
       state.userID = userID.id;
     },
-    userLoggedOut: (state) => {
-      state.token = null;
-    },
+    userLoggedOut: (state) => initialState,
     userSetNewAvatar: (state, action: PayloadAction<string>) => {
       state.avatar = action.payload;
     },
