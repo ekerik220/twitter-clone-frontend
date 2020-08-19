@@ -16,6 +16,17 @@ const ADD_USER_TO_LIST = gql`
   }
 `;
 
+const REMOVE_USER_FROM_LIST = gql`
+  mutation RemoveUserFromList($userID: ID!, $listID: ID!) {
+    removeUserFromList(userID: $userID, listID: $listID) {
+      id
+      username
+      handle
+      avatar
+    }
+  }
+`;
+
 type PropTypes = { added?: boolean; user: User };
 
 export function User(props: PropTypes) {
@@ -28,7 +39,6 @@ export function User(props: PropTypes) {
     optimisticResponse: {
       __typename: "Mutation",
       addUserToList: {
-        __typename: "User",
         id: props.user.id,
         username: props.user.username,
         handle: props.user.handle,
@@ -55,7 +65,48 @@ export function User(props: PropTypes) {
       store.writeFragment({
         id: `List:${listID}`,
         fragment: ListUsersFragment,
-        data: { ...read, users: [data?.addUserToList, ...read.users] },
+        data: { users: [data?.addUserToList, ...read.users] },
+      });
+    },
+  });
+
+  // * GQL mutation to remove a user from this list
+  const [removeUserFromList] = useMutation(REMOVE_USER_FROM_LIST, {
+    variables: { userID: props.user.id, listID },
+    optimisticResponse: {
+      __typename: "Mutation",
+      removeUserFromList: {
+        id: props.user.id,
+        username: props.user.username,
+        handle: props.user.handle,
+        avatar: props.user.avatar,
+      },
+    },
+    update: (store, { data }) => {
+      const ListUsersFragment = gql`
+        fragment ListUsers on List {
+          users {
+            id
+            username
+            handle
+            avatar
+          }
+        }
+      `;
+
+      const read: any = store.readFragment({
+        id: `List:${listID}`,
+        fragment: ListUsersFragment,
+      });
+
+      store.writeFragment({
+        id: `List:${listID}`,
+        fragment: ListUsersFragment,
+        data: {
+          users: read.users.filter(
+            (user: any) => user.id !== data?.removeUserFromList.id
+          ),
+        },
       });
     },
   });
@@ -71,9 +122,18 @@ export function User(props: PropTypes) {
             <Username>{props.user.username}</Username>
             <Handle>@{props.user.handle}</Handle>
           </UserInfo>
-          <AddButton variation="outline" onClick={() => addUserToList()}>
-            {props.added ? "Remove" : "Add"}
-          </AddButton>
+          {props.added ? (
+            <RemoveButton
+              variation="outline"
+              onClick={() => removeUserFromList()}
+            >
+              Remove
+            </RemoveButton>
+          ) : (
+            <AddButton variation="outline" onClick={() => addUserToList()}>
+              Add
+            </AddButton>
+          )}
         </UserContentHeader>
         <Biography>
           The official Twitter for @Marvel 's Agents of S.H.I.E.L.D. on
@@ -119,6 +179,12 @@ const Biography = styled.span`
 
 const AddButton = styled(Button)`
   width: 60px;
+  height: 30px;
+  margin-left: auto;
+`;
+
+const RemoveButton = styled(Button)`
+  width: 80px;
   height: 30px;
   margin-left: auto;
 `;
