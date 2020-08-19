@@ -36,37 +36,37 @@ export function NavList() {
     <>
       <NavItem to="/home" selected={path === "/home"}>
         <NavItemHoverWrap>
-          <HomeIcon />
+          <HomeIcon selected={path === "/home"} />
           <NavText>Home</NavText>
         </NavItemHoverWrap>
       </NavItem>
       <NavItem to="/explore" selected={path === "/explore"}>
         <NavItemHoverWrap>
-          <ExploreIcon />
+          <ExploreIcon selected={path === "/explore"} />
           <NavText>Explore</NavText>
         </NavItemHoverWrap>
       </NavItem>
       <NavItem to="/notifications" selected={path === "/notifications"}>
         <NavItemHoverWrap>
-          <NotificationsIcon />
+          <NotificationsIcon selected={path === "/notifications"} />
           <NavText>Notifications</NavText>
         </NavItemHoverWrap>
       </NavItem>
       <NavItem to="/messages" selected={path === "/messages"}>
         <NavItemHoverWrap>
-          <MessagesIcon />
+          <MessagesIcon selected={path === "/messages"} />
           <NavText>Messages</NavText>
         </NavItemHoverWrap>
       </NavItem>
       <NavItem to="/bookmarks" selected={path === "/bookmarks"}>
         <NavItemHoverWrap>
-          <BookmarksIcon />
+          <BookmarksIcon filled={path === "/bookmarks"} />
           <NavText>Bookmarks</NavText>
         </NavItemHoverWrap>
       </NavItem>
       <NavItem to="/lists" selected={path === "/lists"}>
         <NavItemHoverWrap>
-          <ListsIcon />
+          <ListsIcon selected={path === "/lists"} />
           <NavText>Lists</NavText>
         </NavItemHoverWrap>
       </NavItem>
@@ -75,7 +75,7 @@ export function NavList() {
         selected={path.startsWith("/profile")}
       >
         <NavItemHoverWrap>
-          <ProfileIcon />
+          <ProfileIcon selected={path.startsWith("/profile")} />
           <NavText>Profile</NavText>
         </NavItemHoverWrap>
       </NavItem>
