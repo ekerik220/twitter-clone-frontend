@@ -41,9 +41,10 @@ export function LoginPage() {
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
+  width: 100%;
 
   @media only screen and (min-width: 800px) {
-    height: 100%;
+    min-height: 100%;
   }
 `;
 
