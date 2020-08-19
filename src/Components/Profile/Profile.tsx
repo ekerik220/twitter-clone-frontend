@@ -44,6 +44,7 @@ export function Profile() {
   const currentCategory = useSelector(
     (state: RootState) => state.profile.currentCategory
   );
+  const userID = useSelector((state: RootState) => state.user.userID);
 
   // * Gets the profile data from the server
   const { data, loading } = useQuery(GET_USER, { variables: { handle } });
@@ -59,7 +60,8 @@ export function Profile() {
 
     if (currentCategory === "media") {
       visibleTweets = data.getUserByHandle.tweets.filter(
-        (tweet: Tweet) => tweet.images && tweet.images.length > 0
+        (tweet: Tweet) =>
+          tweet.images && tweet.images.length > 0 && tweet.userID === userID
       );
     }
 
@@ -67,8 +69,10 @@ export function Profile() {
       visibleTweets = data.getUserByHandle.likedTweets;
     }
 
+    visibleTweets = visibleTweets.filter((tweet: Tweet) => !tweet.replyingTo);
+
     setTweets(visibleTweets);
-  }, [data, currentCategory]);
+  }, [data, currentCategory, userID]);
 
   if (loading) {
     return (
