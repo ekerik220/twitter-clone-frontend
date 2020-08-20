@@ -182,6 +182,7 @@ const Input = styled.span.attrs({ role: "textbox" })`
   padding: 10px;
   font-size: 19px;
   min-height: 150px;
+  outline: none;
 
   &:empty:before {
     content: attr(data-placeholder);
