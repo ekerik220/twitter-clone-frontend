@@ -7,7 +7,7 @@ export function Nav() {
     <Wrapper aria-label="Footer">
       {navbarItems.map((navbarItem) => (
         <NavLink
-          href={navbarItem.href}
+          href=""
           target="_blank"
           rel=" noopener noreferrer"
           key={navbarItem.text}
