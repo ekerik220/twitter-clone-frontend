@@ -312,10 +312,11 @@ const ImageBox = styled.div`
 `;
 
 const Image = styled.img`
-  max-width: 500px;
+  width: 100%;
   max-height: 300px;
   border-radius: 15px;
   margin-top: 10px;
+  object-fit: cover;
 `;
 
 const StyledBookmarkIcon = styled(BookmarksIcon)`

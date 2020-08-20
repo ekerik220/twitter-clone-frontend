@@ -85,7 +85,8 @@ const Modal = styled.div`
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 600px;
+  width: 100%;
+  max-width: 600px;
   min-height: 400px;
   height: 90%;
   background: white;

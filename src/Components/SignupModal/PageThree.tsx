@@ -70,7 +70,8 @@ export function PageThree() {
 const Container = styled.div`
   display: flex;
   flex-direction: column;
-  width: 540px;
+  width: 100%;
+  max-width: 540px;
   margin: auto;
 `;
 

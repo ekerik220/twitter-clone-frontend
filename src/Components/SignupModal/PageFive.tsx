@@ -119,7 +119,8 @@ const Container = styled.div`
   height: 100%;
   display: flex;
   flex-direction: column;
-  width: 540px;
+  width: 100%;
+  max-width: 540px;
   margin: auto;
 `;
 
