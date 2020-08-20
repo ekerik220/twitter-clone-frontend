@@ -30,7 +30,7 @@ export function Bookmarks() {
           </LoadingArea>
         )}
         {data?.self.bookmarks.map((tweet: Tweet) => (
-          <Tweet tweet={tweet} />
+          <Tweet key={tweet.id} tweet={tweet} />
         ))}
       </BookmarkedTweets>
     </Container>

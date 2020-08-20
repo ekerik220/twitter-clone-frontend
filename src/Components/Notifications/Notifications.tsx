@@ -68,7 +68,9 @@ export function Notifications() {
             )
           )}
         {currentCategory === "mentions" &&
-          data?.self.mentions.map((tweet: Tweet) => <Tweet tweet={tweet} />)}
+          data?.self.mentions.map((tweet: Tweet) => (
+            <Tweet key={tweet.id} tweet={tweet} />
+          ))}
       </NotificationArea>
     </Container>
   );

@@ -6,7 +6,7 @@ import { Button } from "Components/Button/Button";
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
 import { gql, useMutation, useQuery } from "@apollo/client";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 import { GET_TWEETS } from "Components/Home/Home";
 import { tweetDetailsFragment } from "utils/fragments";
 import { closedTweetModal } from "redux/slices/tweetModalSlice";

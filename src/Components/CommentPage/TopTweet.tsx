@@ -6,7 +6,6 @@ import {
   CommentIcon,
   RetweetIcon,
   LikeIcon,
-  ActionsIcon,
   LikeIconFilled,
   BoldRetweetIcon,
   BookmarksIcon,
@@ -291,11 +290,6 @@ const LikeIconFilledSVG = styled(LikeIconFilled)`
 `;
 
 const RetweetIconSVG = styled(RetweetIcon)`
-  height: 23px;
-  width: 23px;
-`;
-
-const ActionsIconSVG = styled(ActionsIcon)`
   height: 23px;
   width: 23px;
 `;

@@ -27,7 +27,7 @@ export function PageTwoMembers() {
   return (
     <Container>
       {data?.getList.users.map((user: User) => (
-        <User added={true} user={user} />
+        <User key={user.id} added={true} user={user} />
       ))}
     </Container>
   );

@@ -31,6 +31,7 @@ export function FollowSuggestions() {
         {data &&
           data.whoToFollow.map((user: User) => (
             <User
+              key={user.id}
               avatar={user.avatar}
               username={user.username}
               handle={user.handle}
