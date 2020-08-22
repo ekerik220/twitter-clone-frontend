@@ -6,12 +6,7 @@ export function Nav() {
   return (
     <Wrapper aria-label="Footer">
       {navbarItems.map((navbarItem) => (
-        <NavLink
-          href=""
-          target="_blank"
-          rel=" noopener noreferrer"
-          key={navbarItem.text}
-        >
+        <NavLink href="" rel=" noopener noreferrer" key={navbarItem.text}>
           <span>{navbarItem.text}</span>
         </NavLink>
       ))}

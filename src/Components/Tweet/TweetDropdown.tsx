@@ -5,7 +5,6 @@ import { useSelector } from "react-redux";
 import { FollowIcon } from "assets/icons/FollowIcon";
 import { UnfollowIcon } from "assets/icons/UnfollowIcon";
 import { TrashcanIcon } from "assets/icons";
-import _ from "lodash";
 
 export const SELF = gql`
   query Self {

@@ -1,4 +1,4 @@
-import React, { Fragment } from "react";
+import React from "react";
 import styled from "styled-components";
 import { CrossIcon, CameraIcon, DownArrow } from "assets/icons";
 import { InputBox } from "Components/InputBox/InputBox";

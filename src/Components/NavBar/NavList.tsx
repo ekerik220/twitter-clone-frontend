@@ -9,7 +9,6 @@ import {
   BookmarksIcon,
   ListsIcon,
   ProfileIcon,
-  MoreIcon,
 } from "assets/icons";
 import { gql, useQuery } from "@apollo/client";
 

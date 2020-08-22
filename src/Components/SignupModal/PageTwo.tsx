@@ -47,7 +47,7 @@ export function PageTwo() {
       </Label>
       <SubText>
         For more details about these settings, visit the{" "}
-        <a href="#">Help Center</a>.
+        <a href="/">Help Center</a>.
       </SubText>
     </Container>
   );

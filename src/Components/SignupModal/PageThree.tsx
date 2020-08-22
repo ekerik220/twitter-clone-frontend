@@ -57,10 +57,10 @@ export function PageThree() {
         {`${month.substr(0, 3)} ${day}, ${year}`}
       </Field>
       <Text>
-        By signing up, you agree to the <a href="#">Terms of Service</a> and{" "}
-        <a href="#">Privacy Policy</a>, including <a href="#">Cookie Use</a>.
+        By signing up, you agree to the <a href="/">Terms of Service</a> and{" "}
+        <a href="/">Privacy Policy</a>, including <a href="/">Cookie Use</a>.
         Others will be able to find you by email or phone number when provided・
-        <a href="#">Privacy Options</a>
+        <a href="/">Privacy Options</a>
       </Text>
       <SignupButton onClick={handleSignupClick}>Sign up</SignupButton>
     </Container>

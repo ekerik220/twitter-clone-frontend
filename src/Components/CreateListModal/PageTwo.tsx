@@ -1,7 +1,6 @@
 import React from "react";
 import styled from "styled-components";
 import { CrossIcon } from "assets/icons";
-import { InputBox } from "Components/InputBox/InputBox";
 import { Button } from "Components/Button/Button";
 import { useDispatch, useSelector } from "react-redux";
 import { CategorySelector } from "./CategorySelector";
@@ -127,46 +126,4 @@ const ContentAreaWrapper = styled.div`
   height: 100%;
   overflow: hidden;
   border-bottom-right-radius: 15px;
-`;
-
-type ImageBoxProps = { img: string };
-const ImageBox = styled.div<ImageBoxProps>`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  /* background: grey; */
-  height: 195px;
-  min-height: 195px;
-  margin: 2px;
-  background: url("${({ img }) => img}") no-repeat;
-  background-size: cover;
-`;
-
-const CameraIconHover = styled(IconHover)`
-  color: white;
-  position: relative;
-  overflow: hidden;
-
-  &:hover {
-    background-color: ${({ theme }) => theme.colors.whiteHover};
-  }
-`;
-
-const StyledInputBox = styled(InputBox)`
-  margin: 5px 10px;
-`;
-
-const CharCount = styled.span`
-  margin-left: auto;
-  margin-right: 20px;
-  margin-bottom: 10px;
-  color: ${({ theme }) => theme.colors.greyText};
-`;
-
-const HiddenFileInput = styled.input.attrs({ type: "file", title: " " })`
-  opacity: 0;
-  width: 40px;
-  height: 40px;
-  position: absolute;
-  cursor: pointer;
 `;
