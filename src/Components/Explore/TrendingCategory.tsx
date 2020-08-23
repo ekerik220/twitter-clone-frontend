@@ -19,7 +19,9 @@ export function TrendingCategory(props: PropTypes) {
     <Container onClick={handleClick}>
       <GreyText>{props.number} · Trending</GreyText>
       <Hashtag>{props.hashtag}</Hashtag>
-      <GreyText>{props.numOfTweets} Twats</GreyText>
+      <GreyText>
+        {props.numOfTweets} {props.numOfTweets > 1 ? "Twats" : "Twat"}
+      </GreyText>
     </Container>
   );
 }
