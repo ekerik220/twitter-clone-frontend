@@ -33,7 +33,7 @@ export function UserInfo(props: Props) {
         <Avatar width="40px" height="40px" url={data?.self.avatar} />
         <UsernameBox>
           <Username>{data?.self.username}</Username>
-          <TwitterHandle>{data?.self.handle}</TwitterHandle>
+          <TwitterHandle>@{data?.self.handle}</TwitterHandle>
         </UsernameBox>
       </Info>
       <DownArrowSVG />
