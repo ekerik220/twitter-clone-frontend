@@ -116,6 +116,7 @@ const NavItem = styled(Link).attrs({ role: "button" })<NavItemProps>`
   padding: 2px 0;
   color: black;
   cursor: pointer;
+  outline: none;
 
   &:hover {
     text-decoration: none;
