@@ -23,7 +23,9 @@ const authLink = setContext((_, { headers }) => {
   };
 });
 
-const uploadLink = createUploadLink({ uri: "http://localhost:4000/" });
+const uploadLink = createUploadLink({
+  uri: "https://twatter-backend.herokuapp.com/",
+});
 
 const client = new ApolloClient({
   //@ts-ignore
