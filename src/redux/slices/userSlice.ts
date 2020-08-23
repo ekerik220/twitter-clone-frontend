@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import jwt from "jsonwebtoken";
+import { client } from "index";
 
 const initialState: RootState["user"] = {
   token: null,
@@ -16,7 +17,13 @@ const slice = createSlice({
       state.token = action.payload;
       state.userID = userID.id;
     },
-    userLoggedOut: (state) => initialState,
+    userLoggedOut: (state) => {
+      state.token = null;
+      state.userID = "";
+      state.avatar = "";
+      // reset apollo cache
+      client.cache.reset();
+    },
     userSetNewAvatar: (state, action: PayloadAction<string>) => {
       state.avatar = action.payload;
     },

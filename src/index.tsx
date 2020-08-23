@@ -27,7 +27,7 @@ const uploadLink = createUploadLink({
   uri: "https://twatter-backend.herokuapp.com/",
 });
 
-const client = new ApolloClient({
+export const client = new ApolloClient({
   //@ts-ignore
   link: authLink.concat(uploadLink),
   cache: new InMemoryCache(),
