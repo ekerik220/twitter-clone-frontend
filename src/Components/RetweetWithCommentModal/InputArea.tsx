@@ -304,7 +304,11 @@ const StyledCrossIcon = styled(CrossIcon)`
   width: 19px;
 `;
 
-const HiddenFileInput = styled.input.attrs({ type: "file", title: " " })`
+const HiddenFileInput = styled.input.attrs({
+  type: "file",
+  title: " ",
+  accept: "image/png, image/jpeg",
+})`
   position: absolute;
   height: 50px;
   opacity: 0;

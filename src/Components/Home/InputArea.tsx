@@ -226,7 +226,11 @@ const TweetButton = styled(Button)`
   font-weight: bold;
 `;
 
-const HiddenFileInput = styled.input.attrs({ type: "file", title: " " })`
+const HiddenFileInput = styled.input.attrs({
+  type: "file",
+  title: " ",
+  accept: "image/png, image/jpeg",
+})`
   position: absolute;
   height: 50px;
   opacity: 0;

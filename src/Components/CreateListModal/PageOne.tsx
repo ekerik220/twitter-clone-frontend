@@ -410,7 +410,11 @@ const CharCount = styled.span`
   color: ${({ theme }) => theme.colors.greyText};
 `;
 
-const HiddenFileInput = styled.input.attrs({ type: "file", title: " " })`
+const HiddenFileInput = styled.input.attrs({
+  type: "file",
+  title: " ",
+  accept: "image/png, image/jpeg",
+})`
   opacity: 0;
   width: 40px;
   height: 40px;

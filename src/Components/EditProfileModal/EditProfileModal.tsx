@@ -299,7 +299,11 @@ const StyledInputBox = styled(InputBox)`
   margin: 5px 10px;
 `;
 
-const HiddenFileInput = styled.input.attrs({ type: "file", title: " " })`
+const HiddenFileInput = styled.input.attrs({
+  type: "file",
+  title: " ",
+  accept: "image/png, image/jpeg",
+})`
   opacity: 0;
   width: 40px;
   height: 40px;
